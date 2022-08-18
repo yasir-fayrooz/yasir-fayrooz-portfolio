@@ -1,3 +1,116 @@
 .text {
   color: var(--text-color);
 }
+
+.typing p {
+  border-right: .15em solid var(--text-color);
+  border-top:none;
+  border-left: none;
+  border-bottom: none;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.typing p:nth-child(1) {
+  width: 1em;
+  -webkit-animation: type 3s steps(40, end) blink .5s step-end infinite alternate;
+  animation: type 3s steps(40, end);
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
+}
+
+.typing p:nth-child(2) {
+  visibility: hidden;
+  width: 1em;
+  -webkit-animation: type-start 5s steps(20, end), blink .5s step-end infinite alternate;
+  animation: type-start 5s steps(20, end), blink .5s step-end infinite alternate;
+  -webkit-animation-delay: 3.2s;
+  animation-delay: 3.2s;
+}
+
+.typing p:nth-child(3) {
+  display: none;
+  width: 1em;
+  -webkit-animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+  animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+}
+
+.typing p:nth-child(4) {
+  display: none;
+  width: 1em;
+  -webkit-animation: type4 5s steps(20, end), blink .5s step-end infinite alternate;
+  animation: type4 5s steps(20, end), blink .5s step-end infinite alternate;
+}
+
+@keyframes type-start {
+  0% {
+    visibility: visible;
+  }
+  100% {
+    visibility: visible;
+  }
+}
+
+@keyframes type {
+  0% {
+    width: 0;
+  }
+  99.9% {
+    width: 23em;
+    border-right: .15em solid var(--text-color);;
+  }
+  100% {
+    width: 23em;
+    border: none;
+  }
+}
+
+@keyframes type2 {
+  0% {
+    visibility: visible;
+    width: 1em;
+  }
+  1% {
+    width: 1.1em;
+  }
+  99.9% {
+    width: 14.9em;
+    border-right: .15em solid var(--text-color);;
+  }
+  100% {
+    width: 15em;
+    border: none;
+  }
+}
+
+@keyframes type3 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes type4 {
+  0% {
+    width: 0;
+  }
+  1% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
+
