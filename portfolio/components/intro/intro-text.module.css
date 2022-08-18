@@ -2,6 +2,16 @@
   color: var(--text-color);
 }
 
+.wave {
+  animation-name: wave-animation;  /* Refers to the name of your @keyframes element below */
+  animation-duration: 2.5s;        /* Change to speed up or slow down */
+  animation-iteration-count: infinite;  /* Never stop waving :) */
+  transform-origin: 70% 70%;       /* Pivot around the bottom-left palm */
+  display: inline-block;
+  -webkit-animation-delay: 3.2s;
+  animation-delay: 3.2s;
+}
+
 .typing p {
   border-right: .15em solid var(--text-color);
   border-top:none;
@@ -22,31 +32,61 @@
 .typing p:nth-child(2) {
   visibility: hidden;
   width: 1em;
-  -webkit-animation: type-start 5s steps(20, end), blink .5s step-end infinite alternate;
-  animation: type-start 5s steps(20, end), blink .5s step-end infinite alternate;
+  -webkit-animation: type-start2 1s steps(20, end), type2 3s steps(40, end), blink .5s step-end infinite alternate;
+  animation: type-start2 1s steps(20, end), type2 3s steps(40, end), blink .5s step-end infinite alternate;
   -webkit-animation-delay: 3.2s;
   animation-delay: 3.2s;
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
 }
 
 .typing p:nth-child(3) {
-  display: none;
+  visibility: hidden;
   width: 1em;
-  -webkit-animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
-  animation: type3 5s steps(20, end), blink .5s step-end infinite alternate;
+  -webkit-animation: type-start3 1s steps(20, end), type3 2s steps(40, end), blink .5s step-end infinite alternate;
+  animation: type-start3 1s steps(20, end), type3 2s steps(40, end), blink .5s step-end infinite alternate;
+  -webkit-animation-delay: 6.4s;
+  animation-delay: 6.4s;
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
 }
 
 .typing p:nth-child(4) {
-  display: none;
+  visibility: hidden;
   width: 1em;
-  -webkit-animation: type4 5s steps(20, end), blink .5s step-end infinite alternate;
-  animation: type4 5s steps(20, end), blink .5s step-end infinite alternate;
+  -webkit-animation: type-start4 1s steps(20, end), type4 3s steps(40, end), blink .5s step-end infinite alternate;
+  animation: type-start4 1s steps(20, end), type4 3s steps(40, end), blink .5s step-end infinite alternate;
+  -webkit-animation-delay: 8.5s;
+  animation-delay: 8.5s;
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
 }
 
-@keyframes type-start {
-  0% {
+@keyframes wave-animation {
+  0% { transform: rotate( 0.0deg) }
+ 10% { transform: rotate(14.0deg) }  /* The following five values can be played with to make the waving more or less extreme */
+ 20% { transform: rotate(-8.0deg) }
+ 30% { transform: rotate(14.0deg) }
+ 40% { transform: rotate(-4.0deg) }
+ 50% { transform: rotate(10.0deg) }
+ 60% { transform: rotate( 0.0deg) }  /* Reset for the last half to pause */
+100% { transform: rotate( 0.0deg) }
+}
+
+@keyframes type-start2 {
+  to {
     visibility: visible;
   }
-  100% {
+}
+
+@keyframes type-start3 {
+  to {
+    visibility: visible;
+  }
+}
+
+@keyframes type-start4 {
+  to {
     visibility: visible;
   }
 }
@@ -70,8 +110,8 @@
     visibility: visible;
     width: 1em;
   }
-  1% {
-    width: 1.1em;
+  60% {
+    width: 1em;
   }
   99.9% {
     width: 14.9em;
@@ -85,25 +125,37 @@
 
 @keyframes type3 {
   0% {
-    width: 0;
+    visibility: visible;
+    width: 1em;
   }
-  1% {
-    opacity: 1;
+  60% {
+    width: 1em;
+  }
+  99.9% {
+    width: 12.9em;
+    border-right: .15em solid var(--text-color);;
   }
   100% {
-    opacity: 1;
+    width: 13em;
+    border: none;
   }
 }
 
 @keyframes type4 {
   0% {
-    width: 0;
+    visibility: visible;
+    width: 1em;
   }
-  1% {
-    opacity: 1;
+  60% {
+    width: 1em;
+  }
+  99.9% {
+    width: 22.9em;
+    border-right: .15em solid var(--text-color);;
   }
   100% {
-    opacity: 1;
+    width: 23em;
+    border: none;
   }
 }
 

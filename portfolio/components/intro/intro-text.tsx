@@ -3,7 +3,9 @@ import styles from './intro-text.module.css';
 const IntroText = () => {
   return (
     <div className={styles.text + ' ' + styles.typing}>
-      <p>\[._.]/ Hey there👋 I'm Yasir Fayrooz</p>
+      <p>
+        \[._.]/ Hey there <span className={styles.wave}>👋</span> I'm Yasir Fayrooz
+      </p>
       <p>
         <span className="text-green-300">$ </span> A "Full Stack" Engineer
       </p>
