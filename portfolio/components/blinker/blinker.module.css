@@ -1,0 +1,12 @@
+.blinker {
+  background-color: var(--text-color);
+  width: auto;
+  height: 80%;
+  animation: blink-animation 1s steps(2, start) infinite;
+}
+
+@keyframes blink-animation {
+  to {
+    visibility: hidden;
+  }
+}
