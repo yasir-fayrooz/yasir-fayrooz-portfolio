@@ -3,9 +3,11 @@ import Head from 'next/head';
 import React, { useState } from 'react';
 import Intro from '../components/intro/intro';
 import { GlobalProvider } from '../contexts/GlobalContext';
+import { WindowsProvider } from '../contexts/WindowsContext';
 import TerminalModal from '../modals/terminal/terminal';
 import { WindowState } from '../shared/interfaces';
 import Window from '../modals/window/window';
+import StartBar from '../components/startbar/startbar';
 
 const Home: NextPage = () => {
   const [terminalState, setTerminalState] = useState(WindowState.Closed);
@@ -49,7 +51,11 @@ const Home: NextPage = () => {
         </main>
 
         <footer>
-          <div className="py-3 w-full bg-blue-500/[0.03]">test</div>
+          <WindowsProvider value={{ terminalState: terminalState, setTerminalState: setTerminalState }}>
+            <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3]">
+              <StartBar />
+            </div>
+          </WindowsProvider>
         </footer>
       </div>
     </div>

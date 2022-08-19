@@ -25,7 +25,7 @@ const Window = (props: IWindow) => {
     height: props.calcHeight(),
     position: { x: width / 2 - props.calcWidth() / 2, y: height / 2 - props.calcHeight() / 2 },
   });
-  const { setWindowState } = React.useContext(GlobalContext);
+  const { windowState, setWindowState } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
     if (previousWidth && previousWidth > 0) {
@@ -70,12 +70,15 @@ const Window = (props: IWindow) => {
     <Rnd
       size={{ width: size.width, height: size.height }}
       position={size.position}
-      style={{ position: 'fixed' }}
+      style={{ position: 'fixed', zIndex: 2 }}
       bounds="window"
       minWidth={280}
       minHeight={200}
       dragHandleClassName="handle"
-      className="bg-black border border-slate-700"
+      className={
+        (windowState === WindowState.Minimised ? styles.minimised : styles.maximised) +
+        ' bg-black border border-slate-700 rnd'
+      }
       onDragStop={(e, d) => {
         setSize({ width: size.width, height: size.height, position: { x: d.x, y: d.y } });
       }}
@@ -99,7 +102,10 @@ const Window = (props: IWindow) => {
 
         {/* WINDOW BUTTONS */}
         <div className="flex justify-end">
-          <button className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out">
+          <button
+            className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
+            onClick={() => setWindowState(WindowState.Minimised)}
+          >
             <span className="material-symbols-outlined">minimize</span>
           </button>
 
