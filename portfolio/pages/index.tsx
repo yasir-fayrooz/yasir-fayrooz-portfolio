@@ -25,23 +25,33 @@ const Home: NextPage = () => {
         </style>
       </Head>
 
-      <main className="flex grow flex-row w-full h-full bg-zinc-900">
-        <GlobalProvider value={{ windowState: terminalState, setWindowState: setTerminalState }}>
-          <div className="container mx-auto">
-            <Intro />
-          </div>
+      <div className="flex flex-col w-full h-full bg-zinc-900">
+        <main className="grow">
+          <GlobalProvider value={{ windowState: terminalState, setWindowState: setTerminalState }}>
+            <div className="container mx-auto flex h-full">
+              <Intro />
+            </div>
 
-          {terminalState !== WindowState.Closed ? (
-            <Window
-              height={window.innerHeight / 2.5 >= 200 ? window.innerHeight / 2.5 + '' : window.innerHeight + ''}
-              width={window.innerWidth / 2 >= 350 ? window.innerWidth / 2 + '' : window.innerWidth + ''}
-              title="Command Prompt"
-            >
-              <TerminalModal />
-            </Window>
-          ) : null}
-        </GlobalProvider>
-      </main>
+            {terminalState !== WindowState.Closed ? (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight / 2.5 >= 250 ? window.innerHeight / 2.5 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth / 2 >= 350 ? window.innerWidth / 2 : window.innerWidth;
+                }}
+                title="Command Prompt"
+              >
+                <TerminalModal />
+              </Window>
+            ) : null}
+          </GlobalProvider>
+        </main>
+
+        <footer>
+          <div className="py-3 w-full bg-blue-500/[0.03]">test</div>
+        </footer>
+      </div>
     </div>
   );
 };

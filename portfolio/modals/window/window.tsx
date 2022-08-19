@@ -1,6 +1,6 @@
 import styles from './window.module.css';
 import Image from 'next/image';
-import { Rnd } from 'react-rnd';
+import { Position, Rnd } from 'react-rnd';
 import React from 'react';
 import GlobalContext from '../../contexts/GlobalContext';
 import { WindowState } from '../../shared/interfaces';
@@ -9,8 +9,8 @@ import usePreviousDifferent from '@rooks/use-previous-different';
 
 interface IWindow {
   children: React.ReactNode;
-  height: number;
-  width: number;
+  calcHeight: () => number;
+  calcWidth: () => number;
   title: string;
   icon?: string;
 }
@@ -21,9 +21,9 @@ const Window = (props: IWindow) => {
   const previousHeight = usePreviousDifferent(height);
 
   const [size, setSize] = React.useState({
-    width: props.width,
-    height: props.height,
-    position: { x: width / 2 - props.width, y: height / 2 - props.height },
+    width: props.calcWidth(),
+    height: props.calcHeight(),
+    position: { x: width / 2 - props.calcWidth() / 2, y: height / 2 - props.calcHeight() / 2 },
   });
   const { setWindowState } = React.useContext(GlobalContext);
 
@@ -37,30 +37,34 @@ const Window = (props: IWindow) => {
           position: { ...state.position, x: 0 },
         }));
       }
-
-      console.log(size);
     }
   }, [previousWidth, width]);
 
   React.useEffect(() => {
     if (previousHeight && previousHeight > 0) {
-      console.log('heigghtt');
-      if (previousHeight > height) {
-        const heightDiff = previousHeight - height;
+      const yEdge = size.height + size.position.y;
+      if (height < yEdge) {
         setSize((state) => ({
           ...state,
-          y: state.position.y - heightDiff,
-        }));
-      }
-      if (height > previousHeight) {
-        const heightDiff = height - previousHeight;
-        setSize((state) => ({
-          ...state,
-          y: state.position.y + heightDiff,
+          height: size.height > height ? height : size.height,
+          position: { ...state.position, y: 0 },
         }));
       }
     }
-  }, [previousHeight, height, setSize]);
+  }, [previousHeight, height]);
+
+  function toggleFullScreen() {
+    if (size.width === width && size.height === height) {
+      const defaultSize = {
+        width: props.calcWidth(),
+        height: props.calcHeight(),
+        position: { x: width / 2 - props.calcWidth() / 2, y: height / 2 - props.calcHeight() / 2 },
+      };
+      setSize(defaultSize);
+    } else {
+      setSize({ width: width, height: height, position: { x: 0, y: 0 } });
+    }
+  }
 
   return (
     <Rnd
@@ -68,15 +72,17 @@ const Window = (props: IWindow) => {
       position={size.position}
       style={{ position: 'fixed' }}
       bounds="window"
+      minWidth={280}
+      minHeight={200}
       dragHandleClassName="handle"
-      className="bg-black border border-slate-700 window"
+      className="bg-black border border-slate-700"
       onDragStop={(e, d) => {
         setSize({ width: size.width, height: size.height, position: { x: d.x, y: d.y } });
       }}
       onResizeStop={(e, direction, ref, d, position) => {
         setSize({
-          width: ref.style.width,
-          height: ref.style.height,
+          width: parseInt(ref.style.width),
+          height: parseInt(ref.style.height),
           position: position,
         });
       }}
@@ -84,11 +90,11 @@ const Window = (props: IWindow) => {
       {/* TITLE BAR */}
       <div className="flex bg-slate-200 w-full">
         {/* TITLE AND ICON */}
-        <div className="flex py-1 grow items-center handle cursor-grab active:cursor-grabbing">
+        <div className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing">
           <div className="h-full w-7 ml-1 flex flex-col justify-center">
             <Image src="/images/terminal-icon.png" height="300" width="300" layout="responsive" />
           </div>
-          <p className="ml-2 font-semibold text-black">{props.title}</p>
+          <p className={styles.window + ' ml-2 text-black'}>{props.title}</p>
         </div>
 
         {/* WINDOW BUTTONS */}
@@ -97,8 +103,13 @@ const Window = (props: IWindow) => {
             <span className="material-symbols-outlined">minimize</span>
           </button>
 
-          <button className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out">
-            <span className="material-symbols-outlined">fullscreen</span>
+          <button
+            className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
+            onClick={() => toggleFullScreen()}
+          >
+            <span className="material-symbols-outlined">
+              {width === size.width && height === size.height ? 'close_fullscreen' : 'fullscreen'}
+            </span>
           </button>
 
           <button
