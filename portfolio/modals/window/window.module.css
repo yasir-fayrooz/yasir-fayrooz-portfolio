@@ -7,23 +7,17 @@
 .minimised {
   visibility: hidden;
   transform: translate(calc(100% / 2), 90vh) scale(0.01, 0.01) !important;
-  transition: transform 0.07s linear 0s, visibility 600ms;
+  transition: transform 0.1s ease-in-out 0s, visibility 600ms;
 
 }
 
 .maximised {
   visibility: visible;
-  -webkit-animation: maximiseanim 6s steps(40, end);
-  animation: maximiseanim 6s steps(40, end);
-  -webkit-animation-fill-mode:forwards;
-  animation-fill-mode: forwards;
+  animation: 0.1s ease-in-out maximiseanim;
 }
 
 @keyframes maximiseanim {
-  from {
-    transform: translate(calc(100% / 2), 90vh) scale(0.01, 0.01) !important;
-  }
-  to {
-    transform: scale(1, 1) !important;
-  }
+  0% {transform: translate(calc(100% / 2), 90vh) scale(0.1) !important;  }
+  1% {transform: translate(calc(100% / 2), 90vh) scale(0.1)}
+  100% { transform: inherit scale(1);}
 }
