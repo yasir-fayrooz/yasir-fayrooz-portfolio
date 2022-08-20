@@ -37,7 +37,7 @@ const Home: NextPage = () => {
             {terminalState !== WindowState.Closed ? (
               <Window
                 calcHeight={() => {
-                  return window.innerHeight / 2.5 >= 250 ? window.innerHeight / 2.5 : window.innerHeight;
+                  return window.innerHeight / 2 >= 250 ? window.innerHeight / 2 : window.innerHeight;
                 }}
                 calcWidth={() => {
                   return window.innerWidth / 2 >= 350 ? window.innerWidth / 2 : window.innerWidth;

@@ -90,45 +90,47 @@ const Window = (props: IWindow) => {
         });
       }}
     >
-      {/* TITLE BAR */}
-      <div className="flex bg-slate-200 w-full">
-        {/* TITLE AND ICON */}
-        <div className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing">
-          <div className="h-full w-7 ml-1 flex flex-col justify-center">
-            <Image src="/images/terminal-icon.png" height="300" width="300" layout="responsive" />
+      <div className="flex flex-col w-full h-full">
+        {/* TITLE BAR */}
+        <div className="flex bg-slate-200 w-full">
+          {/* TITLE AND ICON */}
+          <div className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing">
+            <div className="h-full w-7 ml-1 flex flex-col justify-center">
+              <Image src="/images/terminal-icon.png" height="300" width="300" layout="responsive" />
+            </div>
+            <p className={styles.window + ' ml-2 text-black'}>{props.title}</p>
           </div>
-          <p className={styles.window + ' ml-2 text-black'}>{props.title}</p>
+
+          {/* WINDOW BUTTONS */}
+          <div className="flex justify-end">
+            <button
+              className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
+              onClick={() => setWindowState(WindowState.Minimised)}
+            >
+              <span className="material-symbols-outlined">minimize</span>
+            </button>
+
+            <button
+              className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
+              onClick={() => toggleFullScreen()}
+            >
+              <span className="material-symbols-outlined">
+                {width === size.width && height === size.height ? 'close_fullscreen' : 'fullscreen'}
+              </span>
+            </button>
+
+            <button
+              className="flex items-center px-2 text-slate-400 hover:text-slate-200 hover:bg-red-600 transition duration-300 ease-in-out"
+              onClick={() => setWindowState(WindowState.Closed)}
+            >
+              <span className="material-symbols-outlined">close</span>
+            </button>
+          </div>
         </div>
 
-        {/* WINDOW BUTTONS */}
-        <div className="flex justify-end">
-          <button
-            className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
-            onClick={() => setWindowState(WindowState.Minimised)}
-          >
-            <span className="material-symbols-outlined">minimize</span>
-          </button>
-
-          <button
-            className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
-            onClick={() => toggleFullScreen()}
-          >
-            <span className="material-symbols-outlined">
-              {width === size.width && height === size.height ? 'close_fullscreen' : 'fullscreen'}
-            </span>
-          </button>
-
-          <button
-            className="flex items-center px-2 text-slate-400 hover:text-slate-200 hover:bg-red-600 transition duration-300 ease-in-out"
-            onClick={() => setWindowState(WindowState.Closed)}
-          >
-            <span className="material-symbols-outlined">close</span>
-          </button>
-        </div>
+        {/* CHILD WINDOW COMPONENT */}
+        <div className="grow">{props.children}</div>
       </div>
-
-      {/* CHILD WINDOW COMPONENT */}
-      {props.children}
     </Rnd>
   );
 };

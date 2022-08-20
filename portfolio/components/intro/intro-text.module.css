@@ -19,6 +19,7 @@
   border-bottom: none;
   white-space: nowrap;
   overflow: hidden;
+  @apply xxxs:text-[0.7em];
 }
 
 .typing p:nth-child(1) {
