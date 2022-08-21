@@ -8,7 +8,7 @@ import { useWindowSize } from '@react-hook/window-size';
 import usePreviousDifferent from '@rooks/use-previous-different';
 
 interface IWindow {
-  children: React.ReactNode;
+  children: React.ReactElement;
   calcHeight: () => number;
   calcWidth: () => number;
   title: string;
@@ -25,6 +25,8 @@ const Window = (props: IWindow) => {
     height: props.calcHeight(),
     position: { x: width / 2 - props.calcWidth() / 2, y: height / 2 - props.calcHeight() / 2 },
   });
+  const [isActive, setIsActive] = React.useState(false);
+
   const { windowState, setWindowState } = React.useContext(GlobalContext);
 
   React.useEffect(() => {
@@ -53,6 +55,25 @@ const Window = (props: IWindow) => {
     }
   }, [previousHeight, height]);
 
+  let contentWindow: HTMLElement;
+  React.useLayoutEffect(() => {
+    contentWindow = document.getElementById('contentWindow')!;
+    window.addEventListener('click', clickListener);
+
+    //unmount cleanup
+    return () => {
+      window.removeEventListener('click', clickListener);
+    };
+  }, []);
+
+  function clickListener(e: MouseEvent) {
+    if (e.target && contentWindow?.contains(e.target as Node)) {
+      setIsActive(true);
+    } else {
+      setIsActive(false);
+    }
+  }
+
   function toggleFullScreen() {
     if (size.width === width && size.height === height) {
       const defaultSize = {
@@ -77,7 +98,7 @@ const Window = (props: IWindow) => {
       dragHandleClassName="handle"
       className={
         (windowState === WindowState.Minimised ? styles.minimised : styles.maximised) +
-        ' bg-black border border-slate-700 rnd'
+        ` bg-black border ${isActive ? 'border-slate-500' : 'border-slate-700'} rnd`
       }
       onDragStop={(e, d) => {
         setSize({ width: size.width, height: size.height, position: { x: d.x, y: d.y } });
@@ -92,7 +113,7 @@ const Window = (props: IWindow) => {
     >
       <div className="flex flex-col w-full h-full">
         {/* TITLE BAR */}
-        <div className="flex bg-slate-200 w-full">
+        <div className={`flex ${isActive ? 'bg-slate-200' : 'bg-slate-600'} w-full`}>
           {/* TITLE AND ICON */}
           <div className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing">
             <div className="h-full w-7 ml-1 flex flex-col justify-center">
@@ -129,7 +150,9 @@ const Window = (props: IWindow) => {
         </div>
 
         {/* CHILD WINDOW COMPONENT */}
-        <div className="grow">{props.children}</div>
+        <div id="contentWindow" className="grow min-h-0 overflow-y-auto">
+          {React.cloneElement(props.children, { isActive: isActive })}
+        </div>
       </div>
     </Rnd>
   );

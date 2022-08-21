@@ -22,9 +22,10 @@ const Home: NextPage = () => {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
         />
-        <style>
-          @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap');
-        </style>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap"
+        />
       </Head>
 
       <div className="flex flex-col w-full h-full bg-zinc-900">
@@ -44,7 +45,7 @@ const Home: NextPage = () => {
                 }}
                 title="Command Prompt"
               >
-                <TerminalModal />
+                <TerminalModal isActive={false} />
               </Window>
             ) : null}
           </GlobalProvider>

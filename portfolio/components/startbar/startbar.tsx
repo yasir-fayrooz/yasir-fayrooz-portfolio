@@ -11,6 +11,8 @@ const StartBar = () => {
     switch (terminalState) {
       case WindowState.Minimised:
         setTerminalState(WindowState.Maximised);
+        const terminal = document.getElementById('terminal');
+        setTimeout(() => terminal?.click(), 50);
         break;
       case WindowState.Maximised:
       case WindowState.Open:
@@ -27,13 +29,14 @@ const StartBar = () => {
       <button disabled className={styles.startbarIcon + ' ml-2'}>
         <Image src="/images/start-icon.png" height="348" width="348" layout="responsive" />
       </button>
-      <button disabled className={styles.startbarIcon + ' ml-5'}>
+      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-5'}>
         <Image src="/images/search-icon.png" height="348" width="348" layout="responsive" />
       </button>
-      <button disabled className={styles.startbarIcon + ' ml-5'}>
+      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-5'}>
         <Image src="/images/folder-icon.png" height="348" width="348" layout="responsive" />
       </button>
       <button
+        id="terminalStartBar"
         className={
           styles.startbarIcon +
           ' ml-5 hover:bg-gray-700 ' +

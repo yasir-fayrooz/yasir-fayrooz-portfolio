@@ -1,0 +1,16 @@
+.typing {
+  border-right: .15em solid #ccc;
+  border-top:none;
+  border-left: none;
+  border-bottom: none;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-animation: blink .5s step-end infinite alternate;
+  animation: blink .5s step-end infinite alternate;
+}
+
+@keyframes blink {
+  50% {
+    border-color: transparent;
+  }
+}
