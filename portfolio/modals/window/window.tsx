@@ -55,25 +55,6 @@ const Window = (props: IWindow) => {
     }
   }, [previousHeight, height]);
 
-  let contentWindow: HTMLElement;
-  React.useLayoutEffect(() => {
-    contentWindow = document.getElementById('contentWindow')!;
-    window.addEventListener('click', clickListener);
-
-    //unmount cleanup
-    return () => {
-      window.removeEventListener('click', clickListener);
-    };
-  }, []);
-
-  function clickListener(e: MouseEvent) {
-    if (e.target && contentWindow?.contains(e.target as Node)) {
-      setIsActive(true);
-    } else {
-      setIsActive(false);
-    }
-  }
-
   function toggleFullScreen() {
     if (size.width === width && size.height === height) {
       const defaultSize = {
@@ -150,8 +131,8 @@ const Window = (props: IWindow) => {
         </div>
 
         {/* CHILD WINDOW COMPONENT */}
-        <div id="contentWindow" className="grow min-h-0 overflow-y-auto">
-          {React.cloneElement(props.children, { isActive: isActive })}
+        <div id="contentWindow" className="grow min-h-0">
+          {React.cloneElement(props.children, { isActive: isActive, setIsActive: setIsActive })}
         </div>
       </div>
     </Rnd>

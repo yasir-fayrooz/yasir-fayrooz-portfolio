@@ -4,6 +4,7 @@ import React from 'react';
 import { setTimeout } from 'timers';
 
 interface ITerminalModal {
+  setIsActive: (_value: boolean) => {};
   isActive: boolean;
 }
 
@@ -11,19 +12,33 @@ const TerminalModal = (props: ITerminalModal) => {
   const [commandInput, setCommandInput] = React.useState('');
 
   let terminal: HTMLElement;
+  let terminalInput: HTMLInputElement;
 
   React.useLayoutEffect(() => {
     terminal = document.getElementById('terminal')!;
+    terminalInput = document.getElementById('terminal-input')! as HTMLInputElement;
     setTimeout(() => terminal?.click(), 50);
     new ResizeObserver((entries) => terminalSize(entries)).observe(terminal);
   }, []);
 
-  React.useEffect(() => {
-    if (props.isActive) {
-      let terminalInput = document.getElementById('terminal-input')! as HTMLInputElement;
-      setTimeout(() => terminalInput.focus(), 50);
+  React.useLayoutEffect(() => {
+    window.addEventListener('click', clickListener);
+
+    //unmount cleanup
+    return () => {
+      window.removeEventListener('click', clickListener);
+    };
+  }, []);
+
+  function clickListener(e: MouseEvent) {
+    if (e.target && terminal?.contains(e.target as Node)) {
+      props.setIsActive(true);
+      terminalInput.focus();
+    } else {
+      props.setIsActive(false);
+      terminalInput.blur();
     }
-  }, [props.isActive]);
+  }
 
   function terminalSize(entries: ResizeObserverEntry[]) {
     entries.forEach((entry) => {
@@ -44,8 +59,18 @@ const TerminalModal = (props: ITerminalModal) => {
     });
   }
 
+  function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+    if (e.key === 'Enter') {
+      setCommandInput('');
+      (e.target as HTMLTextAreaElement).value = '';
+      console.log('enter hit');
+    } else {
+      setCommandInput((e.target as HTMLTextAreaElement).value);
+    }
+  }
+
   return (
-    <div id="terminal">
+    <div id="terminal" className={styles.terminal + ' h-full overflow-y-auto'}>
       {/* ASCII ART */}
       <div>
         {title.map((el, index) => (
@@ -67,14 +92,15 @@ const TerminalModal = (props: ITerminalModal) => {
         <p style={{ color: 'var(--text-color)' }} className="text-bold">
           <span className="text-rose-800">root</span>@Yasir_Fayrooz:~$
         </p>
-        <p className={`ml-2 bg-black ${props.isActive && styles.typing}`}>{commandInput}</p>
+        <p style={{ whiteSpace: 'pre' }} className={`ml-2 bg-black ${props.isActive && styles.typing}`}>
+          {commandInput}
+        </p>
       </div>
-      <input
+      <textarea
         id="terminal-input"
-        type="text"
-        onChange={(e) => setCommandInput(e.target.value)}
+        onKeyUp={(e) => onInput(e)}
         className="outline-none border-none bg-black caret-transparent w-0"
-      />
+      ></textarea>
     </div>
   );
 };
