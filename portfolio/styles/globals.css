@@ -6,6 +6,10 @@
   --text-color: #0f0;
 }
 
+.neon-text {
+  color: var(--text-color);
+}
+
 
 html,
 body {

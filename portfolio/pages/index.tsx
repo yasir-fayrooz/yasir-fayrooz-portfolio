@@ -45,7 +45,12 @@ const Home: NextPage = () => {
                 }}
                 title="Command Prompt"
               >
-                <TerminalModal isActive={false} />
+                <TerminalModal
+                  isActive={false}
+                  setIsActive={(_value: boolean) => {
+                    return false;
+                  }}
+                />
               </Window>
             ) : null}
           </GlobalProvider>

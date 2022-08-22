@@ -4,3 +4,8 @@ export enum WindowState {
   Minimised,
   Maximised,
 }
+
+export interface CommandHistory {
+  command: string;
+  element: React.ReactElement;
+}

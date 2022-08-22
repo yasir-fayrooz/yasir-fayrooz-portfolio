@@ -2,6 +2,8 @@ import styles from './terminal.module.css';
 import { title } from './commands';
 import React from 'react';
 import { setTimeout } from 'timers';
+import { handleCommand } from './command-handler';
+import { CommandHistory } from '../../shared/interfaces';
 
 interface ITerminalModal {
   setIsActive: (_value: boolean) => {};
@@ -10,6 +12,7 @@ interface ITerminalModal {
 
 const TerminalModal = (props: ITerminalModal) => {
   const [commandInput, setCommandInput] = React.useState('');
+  const [commandHistory, setCommandHistory] = React.useState([] as CommandHistory[]);
 
   let terminal: HTMLElement;
   let terminalInput: HTMLInputElement;
@@ -20,6 +23,11 @@ const TerminalModal = (props: ITerminalModal) => {
     setTimeout(() => terminal?.click(), 50);
     new ResizeObserver((entries) => terminalSize(entries)).observe(terminal);
   }, []);
+
+  React.useLayoutEffect(() => {
+    terminal = document.getElementById('terminal')!;
+    terminal.scrollTop = terminal.scrollHeight;
+  }, [commandHistory]);
 
   React.useLayoutEffect(() => {
     window.addEventListener('click', clickListener);
@@ -61,9 +69,9 @@ const TerminalModal = (props: ITerminalModal) => {
 
   function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
-      setCommandInput('');
+      handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory);
       (e.target as HTMLTextAreaElement).value = '';
-      console.log('enter hit');
+      setCommandInput('');
     } else {
       setCommandInput((e.target as HTMLTextAreaElement).value);
     }
@@ -72,7 +80,7 @@ const TerminalModal = (props: ITerminalModal) => {
   return (
     <div id="terminal" className={styles.terminal + ' h-full overflow-y-auto'}>
       {/* ASCII ART */}
-      <div>
+      <div className="text-cyan-700">
         {title.map((el, index) => (
           <pre key={index} className="m-0 p-0">
             {el}
@@ -86,6 +94,26 @@ const TerminalModal = (props: ITerminalModal) => {
           For a list of available commands, type '<span style={{ color: 'var(--text-color)' }}>help</span>
           '.
         </p>
+      </div>
+      {/* COMMAND HISTORY */}
+      <div className="ml-2">
+        {commandHistory.map((command, index) => {
+          {
+            return (
+              <>
+                <div className="flex">
+                  <p style={{ color: 'var(--text-color)' }} className="text-bold">
+                    <span className="text-rose-800">root</span>@Yasir_Fayrooz:~$
+                  </p>
+                  <p style={{ whiteSpace: 'pre' }} className="ml-2 bg-black">
+                    {command.command}
+                  </p>
+                </div>
+                {React.cloneElement(command.element, { key: index })}
+              </>
+            );
+          }
+        })}
       </div>
       {/* INPUT FIELD */}
       <div className="flex ml-2">
