@@ -41,10 +41,10 @@ function HelpCommand() {
       <p className="text-cyan-300">List of commands in green:</p>
       {help.map((opt: IHelp, hindex) => {
         return (
-          <div className="ml-4">
+          <div className="ml-4" key={'help' + hindex}>
             {opt.command.map((command, cindex) => {
               return (
-                <span key={cindex}>
+                <span key={'c' + cindex}>
                   <span className="neon-text">{command}</span>
                   {cindex !== opt.command.length - 1 ? <span> / </span> : null}
                 </span>

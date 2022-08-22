@@ -100,7 +100,7 @@ const TerminalModal = (props: ITerminalModal) => {
         {commandHistory.map((command, index) => {
           {
             return (
-              <>
+              <div key={'history' + index}>
                 <div className="flex">
                   <p style={{ color: 'var(--text-color)' }} className="text-bold">
                     <span className="text-rose-800">root</span>@Yasir_Fayrooz:~$
@@ -110,7 +110,7 @@ const TerminalModal = (props: ITerminalModal) => {
                   </p>
                 </div>
                 {React.cloneElement(command.element, { key: index })}
-              </>
+              </div>
             );
           }
         })}

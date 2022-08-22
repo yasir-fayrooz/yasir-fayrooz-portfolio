@@ -49,6 +49,6 @@ export const help: IHelp[] = [
   },
   {
     command: ['clear', 'cls'],
-    description: "When there's too much info in the terminal ugh!!",
+    description: 'Nuke the terminal ugh!!',
   },
 ];
