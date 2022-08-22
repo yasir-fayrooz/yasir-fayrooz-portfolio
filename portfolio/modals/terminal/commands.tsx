@@ -37,7 +37,7 @@ export const help: IHelp[] = [
   },
   {
     command: ['socials'],
-    description: 'Stop stalking me',
+    description: 'Wanna stalk me? 👀',
   },
   {
     command: ['website'],
@@ -49,6 +49,6 @@ export const help: IHelp[] = [
   },
   {
     command: ['clear', 'cls'],
-    description: 'Nuke the terminal ugh!!',
+    description: 'Cleans the terminal when it gets too dirty 🧹',
   },
 ];

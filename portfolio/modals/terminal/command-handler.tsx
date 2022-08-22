@@ -19,19 +19,17 @@ export function handleCommand(
   commandInput = commandInput.trim();
   switch (commandInput) {
     case 'help':
-      const command: CommandHistory = { command: commandInput, element: HelpCommand() };
-      setCommandHistory([...commandHistory, command]);
+      const helpCommand: CommandHistory = { command: commandInput, element: HelpCommand() };
+      setCommandHistory([...commandHistory, helpCommand]);
       break;
     case 'cls':
     case 'clear':
       setCommandHistory([]);
       break;
     default:
-      return (
-        <p>
-          '<span className="text-red-700">{commandInput}</span>' is not recognized as an internal or external command.
-        </p>
-      );
+      const errorCommand: CommandHistory = { command: commandInput, element: unrecognisedCommand(commandInput) };
+      setCommandHistory([...commandHistory, errorCommand]);
+      break;
   }
 }
 
@@ -55,5 +53,13 @@ function HelpCommand() {
         );
       })}
     </>
+  );
+}
+
+function unrecognisedCommand(command: string) {
+  return (
+    <p>
+      '<span className="neon-text">{command}</span>' is not recognized as an internal or external command.
+    </p>
   );
 }

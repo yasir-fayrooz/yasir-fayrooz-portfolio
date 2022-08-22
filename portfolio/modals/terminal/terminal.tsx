@@ -3,18 +3,14 @@ import { title } from './commands';
 import React from 'react';
 import { setTimeout } from 'timers';
 import { handleCommand } from './command-handler';
-import { CommandHistory } from '../../shared/interfaces';
+import { CommandHistory, IWindowChildProps } from '../../shared/interfaces';
 
-interface ITerminalModal {
-  setIsActive: (_value: boolean) => {};
-  isActive: boolean;
-}
-
-const TerminalModal = (props: ITerminalModal) => {
+const TerminalModal = (props: IWindowChildProps) => {
   const [commandInput, setCommandInput] = React.useState('');
   const [commandHistory, setCommandHistory] = React.useState([] as CommandHistory[]);
 
   let terminal: HTMLElement;
+  let parentWindow: HTMLElement;
   let terminalInput: HTMLInputElement;
 
   React.useLayoutEffect(() => {
@@ -30,6 +26,16 @@ const TerminalModal = (props: ITerminalModal) => {
   }, [commandHistory]);
 
   React.useLayoutEffect(() => {
+    parentWindow = document.getElementById(props.windowId)!;
+    window.addEventListener('click', clickListener);
+
+    //unmount cleanup
+    return () => {
+      window.removeEventListener('click', clickListener);
+    };
+  }, []);
+
+  React.useLayoutEffect(() => {
     window.addEventListener('click', clickListener);
 
     //unmount cleanup
@@ -39,7 +45,7 @@ const TerminalModal = (props: ITerminalModal) => {
   }, []);
 
   function clickListener(e: MouseEvent) {
-    if (e.target && terminal?.contains(e.target as Node)) {
+    if (e.target && (terminal?.contains(e.target as Node) || parentWindow?.contains(e.target as Node))) {
       props.setIsActive(true);
       terminalInput.focus();
     } else {
@@ -72,9 +78,11 @@ const TerminalModal = (props: ITerminalModal) => {
       handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory);
       (e.target as HTMLTextAreaElement).value = '';
       setCommandInput('');
-    } else {
-      setCommandInput((e.target as HTMLTextAreaElement).value);
     }
+  }
+
+  function onChangeInput(e: any) {
+    setCommandInput((e.target as HTMLTextAreaElement).value);
   }
 
   return (
@@ -102,11 +110,12 @@ const TerminalModal = (props: ITerminalModal) => {
             return (
               <div key={'history' + index}>
                 <div className="flex">
-                  <p style={{ color: 'var(--text-color)' }} className="text-bold">
-                    <span className="text-rose-800">root</span>@Yasir_Fayrooz:~$
-                  </p>
-                  <p style={{ whiteSpace: 'pre' }} className="ml-2 bg-black">
-                    {command.command}
+                  <p className="text-bold">
+                    <span className="text-rose-800">root</span>
+                    <span className="neon-text">@Yasir_Fayrooz:~$</span>
+                    <span style={{ whiteSpace: 'pre-wrap' }} className="ml-2 bg-black">
+                      {command.command}
+                    </span>
                   </p>
                 </div>
                 {React.cloneElement(command.element, { key: index })}
@@ -116,18 +125,21 @@ const TerminalModal = (props: ITerminalModal) => {
         })}
       </div>
       {/* INPUT FIELD */}
-      <div className="flex ml-2">
-        <p style={{ color: 'var(--text-color)' }} className="text-bold">
-          <span className="text-rose-800">root</span>@Yasir_Fayrooz:~$
-        </p>
-        <p style={{ whiteSpace: 'pre' }} className={`ml-2 bg-black ${props.isActive && styles.typing}`}>
+      <div className="flex">
+        <p style={{ whiteSpace: 'pre-wrap' }} className={`ml-2 bg-black`}>
+          <span className="text-bold mr-2" style={{ color: 'var(--text-color)' }}>
+            <span className="text-rose-800">root</span>
+            @Yasir_Fayrooz:~$
+          </span>
           {commandInput}
+          <span className={`${props.isActive && styles.typing}`}></span>
         </p>
       </div>
       <textarea
         id="terminal-input"
         onKeyUp={(e) => onInput(e)}
-        className="outline-none border-none bg-black caret-transparent w-0"
+        onChange={(e) => onChangeInput(e)}
+        className="outline-none border-none bg-black caret-transparent w-0 h-0"
       ></textarea>
     </div>
   );

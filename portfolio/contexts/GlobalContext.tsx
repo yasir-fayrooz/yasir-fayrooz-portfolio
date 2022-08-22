@@ -1,9 +1,18 @@
 import React from 'react';
-import { WindowState } from '../shared/interfaces';
+import { Windows, WindowState } from '../shared/interfaces';
 
 const GlobalContext = React.createContext({
-  windowState: WindowState.Closed,
-  setWindowState: (_value: WindowState) => {},
+  windowStates: {
+    terminal: WindowState.Closed,
+    about: WindowState.Closed,
+    resume: WindowState.Closed,
+    projects: [],
+    skills: WindowState.Closed,
+    socials: WindowState.Closed,
+    website: WindowState.Closed,
+    contact: WindowState.Closed,
+  } as Windows,
+  setWindowsStates: (_value: Windows) => {},
 });
 
 export const GlobalProvider = GlobalContext.Provider;

@@ -4,7 +4,7 @@ import GlobalContext from '../../contexts/GlobalContext';
 import { WindowState } from '../../shared/interfaces';
 
 const IntroText = () => {
-  const { setWindowState } = React.useContext(GlobalContext);
+  const { windowStates, setWindowsStates } = React.useContext(GlobalContext);
 
   return (
     <>
@@ -23,7 +23,7 @@ const IntroText = () => {
           <span
             className="text-sky-300 underline cursor-pointer"
             onClick={() => {
-              setWindowState(WindowState.Open);
+              setWindowsStates({ ...windowStates, terminal: WindowState.Open });
             }}
           >
             here
