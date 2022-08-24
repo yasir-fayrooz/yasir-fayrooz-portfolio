@@ -35,3 +35,10 @@ h1 {
 
   @apply sm:text-[3em] xs:text-[2.8em] xxs:text-[2.5em] xxxs:text-[1.7em] xxxs:tracking-[-0.17em];
 }
+
+
+h3 {
+  color: var(--text-color);
+  letter-spacing: -1px;
+  font-weight: bold;
+}

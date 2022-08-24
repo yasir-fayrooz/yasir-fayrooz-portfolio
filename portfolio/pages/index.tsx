@@ -1,25 +1,71 @@
 import type { NextPage } from 'next';
 import Head from 'next/head';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import Intro from '../components/intro/intro';
-import { GlobalProvider } from '../contexts/GlobalContext';
 import TerminalModal from '../modals/terminal/terminal';
-import { Windows, WindowState } from '../shared/interfaces';
+import { StartbarRef, Windows, WindowState } from '../shared/interfaces';
 import Window from '../modals/window/window';
 import StartBar from '../components/startbar/startbar';
 import AboutModal from '../modals/about/about';
+import { GlobalProvider } from '../contexts/GlobalContext';
 
 const Home: NextPage = () => {
-  const [windowStates, setWindowsStates] = useState({
-    terminal: WindowState.Closed,
-    about: WindowState.Closed,
-    resume: WindowState.Closed,
-    projects: [],
-    skills: WindowState.Closed,
-    socials: WindowState.Closed,
-    website: WindowState.Closed,
-    contact: WindowState.Closed,
-  } as Windows);
+  const [startbarRefs, setstartbarRefs] = useState<StartbarRef>({
+    terminal: useRef(null),
+    about: useRef(null),
+    resume: useRef(null),
+    projects: useRef(null),
+    skills: useRef(null),
+    socials: useRef(null),
+    website: useRef(null),
+    contact: useRef(null),
+  });
+
+  const [terminalState, setTerminalState] = React.useState<WindowState>(WindowState.Closed);
+  const [aboutState, setAboutState] = React.useState<WindowState>(WindowState.Closed);
+
+  const windows: Windows = {
+    terminal: {
+      state: terminalState,
+      setState: setTerminalState,
+      startbarRef: startbarRefs.terminal,
+    },
+    about: {
+      state: aboutState,
+      setState: setAboutState,
+      startbarRef: startbarRefs.about,
+    },
+    resume: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+    projects: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+    skills: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+    socials: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+    website: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+    contact: {
+      state: WindowState.Closed,
+      setState: (_value: WindowState) => {},
+      startbarRef: undefined,
+    },
+  };
 
   return (
     <div className="w-screen h-screen">
@@ -38,19 +84,14 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flex flex-col w-full h-full bg-zinc-900">
-        <GlobalProvider
-          value={{
-            windowStates: windowStates,
-            setWindowsStates: setWindowsStates,
-          }}
-        >
+        <GlobalProvider value={windows}>
           <main className="grow">
             <div className="container mx-auto flex h-full">
               <Intro />
             </div>
 
             {/* TERMINAL WINDOW */}
-            {windowStates.terminal !== WindowState.Closed && (
+            {terminalState !== WindowState.Closed && (
               <Window
                 calcHeight={() => {
                   return window.innerHeight / 2 >= 250 ? window.innerHeight / 2 : window.innerHeight;
@@ -60,45 +101,37 @@ const Home: NextPage = () => {
                 }}
                 title="Command Prompt"
                 icon="/images/terminal-icon.png"
-                state={windowStates.terminal}
-                setWindowState={(_value: WindowState) => {
-                  setWindowsStates({ ...windowStates, terminal: _value });
-                }}
+                state={terminalState}
+                setState={setTerminalState}
+                startbarRef={startbarRefs.terminal}
               >
-                <TerminalModal
-                  isActive={false}
-                  setIsActive={(_value: boolean) => {
-                    return false;
-                  }}
-                  windowId=""
-                />
+                <TerminalModal windowState={terminalState} setWindowState={setTerminalState} />
               </Window>
             )}
 
             {/* ABOUT WINDOW */}
-            {windowStates.about !== WindowState.Closed && (
+            {aboutState !== WindowState.Closed && (
               <Window
                 calcHeight={() => {
-                  return window.innerHeight / 2 >= 250 ? window.innerHeight / 2 : window.innerHeight;
+                  return window.innerHeight / 1.5 >= 250 ? window.innerHeight / 1.5 : window.innerHeight;
                 }}
                 calcWidth={() => {
-                  return window.innerWidth / 2 >= 250 ? window.innerWidth / 2 : window.innerWidth;
+                  return window.innerWidth / 1.5 >= 250 ? window.innerWidth / 1.5 : window.innerWidth;
                 }}
                 title="About me"
                 icon="/images/about-icon.png"
-                state={windowStates.about}
-                setWindowState={(_value: WindowState) => {
-                  setWindowsStates({ ...windowStates, about: _value });
-                }}
+                state={aboutState}
+                setState={setAboutState}
+                startbarRef={startbarRefs.about}
               >
-                <AboutModal />
+                <AboutModal windowState={aboutState} setWindowState={setAboutState} />
               </Window>
             )}
           </main>
 
           <footer>
             <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3]">
-              <StartBar />
+              <StartBar startbarRefs={startbarRefs} setStartbarRefs={setstartbarRefs} />
             </div>
           </footer>
         </GlobalProvider>

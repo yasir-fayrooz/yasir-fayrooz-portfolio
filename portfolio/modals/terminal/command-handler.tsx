@@ -1,4 +1,5 @@
-import { CommandHistory } from '../../shared/interfaces';
+import GlobalContext from '../../contexts/GlobalContext';
+import { CommandHistory, Windows, WindowState } from '../../shared/interfaces';
 import { help, IHelp } from './commands';
 
 export enum CommandState {
@@ -14,13 +15,22 @@ export let commandState: CommandState = CommandState.ROOT;
 export function handleCommand(
   commandInput: string,
   commandHistory: CommandHistory[],
-  setCommandHistory: React.Dispatch<React.SetStateAction<CommandHistory[]>>
+  setCommandHistory: React.Dispatch<React.SetStateAction<CommandHistory[]>>,
+  windows: Windows
 ) {
   commandInput = commandInput.trim();
   switch (commandInput) {
     case 'help':
       const helpCommand: CommandHistory = { command: commandInput, element: HelpCommand() };
       setCommandHistory([...commandHistory, helpCommand]);
+      break;
+    case 'about':
+      const aboutCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening about me window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, aboutCommand]);
+      windows.about.setState(WindowState.Open);
       break;
     case 'cls':
     case 'clear':
@@ -54,6 +64,10 @@ function HelpCommand() {
       })}
     </>
   );
+}
+
+function OpenWindowCommand(text: string) {
+  return <p>{text}</p>;
 }
 
 function unrecognisedCommand(command: string) {

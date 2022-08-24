@@ -1,25 +1,45 @@
+import { RefObject } from 'react';
+
 export enum WindowState {
   Open,
+  Inactive,
   Closed,
   Minimised,
   Maximised,
 }
 
 export interface IWindowChildProps {
-  setIsActive: (_value: boolean) => {};
-  isActive: boolean;
-  windowId: string;
+  setWindowState: (_value: WindowState) => void;
+  windowState: WindowState;
+  windowRef?: RefObject<HTMLDivElement>;
 }
 
 export interface Windows {
-  terminal: WindowState;
-  about: WindowState;
-  resume: WindowState;
-  projects: Project[];
-  skills: WindowState;
-  socials: WindowState;
-  website: WindowState;
-  contact: WindowState;
+  terminal: WindowInfo;
+  about: WindowInfo;
+  resume: WindowInfo;
+  projects: WindowInfo;
+  skills: WindowInfo;
+  socials: WindowInfo;
+  website: WindowInfo;
+  contact: WindowInfo;
+}
+
+export interface StartbarRef {
+  terminal: RefObject<HTMLButtonElement>;
+  about: RefObject<HTMLButtonElement>;
+  resume: RefObject<HTMLButtonElement>;
+  projects: RefObject<HTMLButtonElement>;
+  skills: RefObject<HTMLButtonElement>;
+  socials: RefObject<HTMLButtonElement>;
+  website: RefObject<HTMLButtonElement>;
+  contact: RefObject<HTMLButtonElement>;
+}
+
+export interface WindowInfo {
+  state: WindowState;
+  setState: (_value: WindowState) => void;
+  startbarRef?: RefObject<HTMLButtonElement>;
 }
 
 export interface Project {

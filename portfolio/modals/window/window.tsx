@@ -1,10 +1,11 @@
 import styles from './window.module.css';
 import Image from 'next/image';
 import { Rnd } from 'react-rnd';
-import React, { useId } from 'react';
+import React, { RefObject } from 'react';
 import { WindowState } from '../../shared/interfaces';
 import { useWindowSize } from '@react-hook/window-size';
 import usePreviousDifferent from '@rooks/use-previous-different';
+import useClickOutside from '../../hooks/useClickOutside';
 
 interface IWindow {
   children: React.ReactElement;
@@ -13,11 +14,11 @@ interface IWindow {
   title: string;
   icon?: string;
   state: WindowState;
-  setWindowState: (_value: WindowState) => void;
+  setState: React.Dispatch<React.SetStateAction<WindowState>>;
+  startbarRef: RefObject<HTMLButtonElement>;
 }
 
 const Window = (props: IWindow) => {
-  const windowId = useId();
   const [width, height] = useWindowSize();
   const previousWidth = usePreviousDifferent(width);
   const previousHeight = usePreviousDifferent(height);
@@ -27,7 +28,6 @@ const Window = (props: IWindow) => {
     height: props.calcHeight(),
     position: { x: width / 2 - props.calcWidth() / 2, y: height / 2 - props.calcHeight() / 2 },
   });
-  const [isActive, setIsActive] = React.useState(false);
 
   React.useEffect(() => {
     if (previousWidth && previousWidth > 0) {
@@ -55,6 +55,16 @@ const Window = (props: IWindow) => {
     }
   }, [previousHeight, height]);
 
+  {
+    /* CLICK LISTENER */
+  }
+  const { windowRef, windowChildRef, rndRef } = useClickOutside(
+    props.startbarRef,
+    props.state,
+    props.setState,
+    styles.maximised
+  );
+
   function toggleFullScreen() {
     if (size.width === width && size.height === height) {
       const defaultSize = {
@@ -70,7 +80,7 @@ const Window = (props: IWindow) => {
 
   return (
     <Rnd
-      id={windowId}
+      ref={rndRef}
       size={{ width: size.width, height: size.height }}
       position={size.position}
       style={{ position: 'fixed' }}
@@ -80,7 +90,7 @@ const Window = (props: IWindow) => {
       dragHandleClassName="handle"
       className={
         (props.state === WindowState.Minimised ? styles.minimised : styles.maximised) +
-        ` bg-black border ${isActive ? 'border-slate-500 z-[2]' : 'border-slate-700 z-[1]'} rnd`
+        ` bg-black border ${props.state === WindowState.Open ? 'border-slate-500 z-[2]' : 'border-slate-700 z-[1]'} rnd`
       }
       onDragStop={(e, d) => {
         setSize({ width: size.width, height: size.height, position: { x: d.x, y: d.y } });
@@ -95,9 +105,12 @@ const Window = (props: IWindow) => {
     >
       <div className="flex flex-col w-full h-full">
         {/* TITLE BAR */}
-        <div className={`flex ${isActive ? 'bg-slate-200' : 'bg-slate-600'} w-full`}>
+        <div className={`flex ${props.state === WindowState.Open ? 'bg-slate-200' : 'bg-slate-600'} w-full`}>
           {/* TITLE AND ICON */}
-          <div className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing">
+          <div
+            ref={windowRef}
+            className="flex min-w-0 py-1 grow items-center handle cursor-grab active:cursor-grabbing"
+          >
             <div className="h-full w-7 ml-1 flex flex-col justify-center">
               <Image
                 src={props.icon ? props.icon : '/images/start-icon.png'}
@@ -113,7 +126,9 @@ const Window = (props: IWindow) => {
           <div className="flex justify-end">
             <button
               className="flex items-center px-2 text-slate-400 hover:text-slate-600 hover:bg-gray-300 transition duration-300 ease-in-out"
-              onClick={() => props.setWindowState(WindowState.Minimised)}
+              onClick={() => {
+                props.setState(WindowState.Minimised);
+              }}
             >
               <span className="material-symbols-outlined">minimize</span>
             </button>
@@ -129,7 +144,7 @@ const Window = (props: IWindow) => {
 
             <button
               className="flex items-center px-2 text-slate-400 hover:text-slate-200 hover:bg-red-600 transition duration-300 ease-in-out"
-              onClick={() => props.setWindowState(WindowState.Closed)}
+              onClick={() => props.setState(WindowState.Closed)}
             >
               <span className="material-symbols-outlined">close</span>
             </button>
@@ -137,8 +152,12 @@ const Window = (props: IWindow) => {
         </div>
 
         {/* CHILD WINDOW COMPONENT */}
-        <div className="grow min-h-0">
-          {React.cloneElement(props.children, { isActive: isActive, setIsActive: setIsActive, windowId: windowId })}
+        <div ref={windowChildRef} className="grow min-h-0">
+          {React.cloneElement(props.children, {
+            windowState: props.state,
+            setWindowState: props.setState,
+            windowRef: windowRef,
+          })}
         </div>
       </div>
     </Rnd>

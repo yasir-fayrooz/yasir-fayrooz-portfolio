@@ -1,81 +1,77 @@
 import styles from './terminal.module.css';
 import { title } from './commands';
-import React from 'react';
+import React, { useRef } from 'react';
 import { setTimeout } from 'timers';
 import { handleCommand } from './command-handler';
-import { CommandHistory, IWindowChildProps } from '../../shared/interfaces';
+import { CommandHistory, IWindowChildProps, WindowState } from '../../shared/interfaces';
+import GlobalContext from '../../contexts/GlobalContext';
 
 const TerminalModal = (props: IWindowChildProps) => {
   const [commandInput, setCommandInput] = React.useState('');
   const [commandHistory, setCommandHistory] = React.useState([] as CommandHistory[]);
 
-  let terminal: HTMLElement;
-  let parentWindow: HTMLElement;
-  let terminalInput: HTMLInputElement;
+  const terminal = useRef<HTMLDivElement>(null);
+  const terminalInput = useRef<HTMLTextAreaElement>(null);
 
-  React.useLayoutEffect(() => {
-    terminal = document.getElementById('terminal')!;
-    terminalInput = document.getElementById('terminal-input')! as HTMLInputElement;
-    setTimeout(() => terminal?.click(), 50);
-    new ResizeObserver((entries) => terminalSize(entries)).observe(terminal);
+  const windows = React.useContext(GlobalContext);
+
+  React.useEffect(() => {
+    setTimeout(() => terminal.current?.click(), 50);
+    new ResizeObserver((entries) => terminalSize(entries)).observe(terminal.current!);
   }, []);
 
-  React.useLayoutEffect(() => {
-    terminal = document.getElementById('terminal')!;
-    terminal.scrollTop = terminal.scrollHeight;
+  React.useEffect(() => {
+    terminal.current!.scrollTop = terminal.current!.scrollHeight;
   }, [commandHistory]);
 
-  React.useLayoutEffect(() => {
-    parentWindow = document.getElementById(props.windowId)!;
-    window.addEventListener('click', clickListener);
-
-    //unmount cleanup
+  React.useEffect(() => {
+    document.addEventListener('click', clickListener, true);
     return () => {
-      window.removeEventListener('click', clickListener);
+      document.removeEventListener('click', clickListener, true);
     };
   }, []);
 
-  React.useLayoutEffect(() => {
-    window.addEventListener('click', clickListener);
-
-    //unmount cleanup
-    return () => {
-      window.removeEventListener('click', clickListener);
-    };
-  }, []);
+  React.useEffect(() => {
+    if (props.windowState === WindowState.Open) {
+      setTimeout(() => terminal.current?.click(), 50);
+    }
+  }, [props.windowState]);
 
   function clickListener(e: MouseEvent) {
-    if (e.target && (terminal?.contains(e.target as Node) || parentWindow?.contains(e.target as Node))) {
-      props.setIsActive(true);
-      terminalInput.focus();
+    if (
+      e.target &&
+      (terminal.current?.contains(e.target as Node) || props.windowRef?.current?.contains(e.target as Node))
+    ) {
+      terminalInput.current?.focus();
     } else {
-      props.setIsActive(false);
-      terminalInput.blur();
+      terminalInput.current?.blur();
     }
   }
 
   function terminalSize(entries: ResizeObserverEntry[]) {
     entries.forEach((entry) => {
-      terminal.style.height = entry.contentRect.height + 'px;';
-      if (entry.contentRect.width < 300) {
-        terminal.style.fontSize = '8px';
-      } else if (entry.contentRect.width < 400) {
-        terminal.style.fontSize = '0.56em';
-      } else if (entry.contentRect.width < 500) {
-        terminal.style.fontSize = '0.75em';
-      } else if (entry.contentRect.width < 600) {
-        terminal.style.fontSize = '0.85em';
-      } else if (entry.contentRect.width < 700) {
-        terminal.style.fontSize = '0.95em';
-      } else {
-        terminal.style.fontSize = '1em';
+      if (terminal.current) {
+        terminal.current.style.height = entry.contentRect.height + 'px;';
+        if (entry.contentRect.width < 300) {
+          terminal.current.style.fontSize = '8px';
+        } else if (entry.contentRect.width < 400) {
+          terminal.current.style.fontSize = '0.56em';
+        } else if (entry.contentRect.width < 500) {
+          terminal.current.style.fontSize = '0.75em';
+        } else if (entry.contentRect.width < 600) {
+          terminal.current.style.fontSize = '0.85em';
+        } else if (entry.contentRect.width < 700) {
+          terminal.current.style.fontSize = '0.95em';
+        } else {
+          terminal.current.style.fontSize = '1em';
+        }
       }
     });
   }
 
   function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
-      handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory);
+      handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory, windows);
       (e.target as HTMLTextAreaElement).value = '';
       setCommandInput('');
     }
@@ -86,7 +82,7 @@ const TerminalModal = (props: IWindowChildProps) => {
   }
 
   return (
-    <div id="terminal" className={styles.terminal + ' h-full overflow-y-auto'}>
+    <div ref={terminal} className={styles.terminal + ' h-full overflow-y-auto'}>
       {/* ASCII ART */}
       <div className="text-cyan-700">
         {title.map((el, index) => (
@@ -110,12 +106,10 @@ const TerminalModal = (props: IWindowChildProps) => {
             return (
               <div key={'history' + index}>
                 <div className="flex">
-                  <p className="text-bold">
+                  <p style={{ whiteSpace: 'pre-wrap' }} className="text-bold">
                     <span className="text-rose-800">root</span>
                     <span className="neon-text">@Yasir_Fayrooz:~$</span>
-                    <span style={{ whiteSpace: 'pre-wrap' }} className="ml-2 bg-black">
-                      {command.command}
-                    </span>
+                    <span className="ml-2 bg-black">{command.command}</span>
                   </p>
                 </div>
                 {React.cloneElement(command.element, { key: index })}
@@ -126,17 +120,17 @@ const TerminalModal = (props: IWindowChildProps) => {
       </div>
       {/* INPUT FIELD */}
       <div className="flex">
-        <p style={{ whiteSpace: 'pre-wrap' }} className={`ml-2 bg-black`}>
+        <p style={{ whiteSpace: 'pre-wrap' }} className={`mx-2 bg-black`}>
           <span className="text-bold mr-2" style={{ color: 'var(--text-color)' }}>
             <span className="text-rose-800">root</span>
             @Yasir_Fayrooz:~$
           </span>
           {commandInput}
-          <span className={`${props.isActive && styles.typing}`}></span>
+          <span className={`${props.windowState === WindowState.Open && styles.typing}`}></span>
         </p>
       </div>
       <textarea
-        id="terminal-input"
+        ref={terminalInput}
         onKeyUp={(e) => onInput(e)}
         onChange={(e) => onChangeInput(e)}
         className="outline-none border-none bg-black caret-transparent w-0 h-0"

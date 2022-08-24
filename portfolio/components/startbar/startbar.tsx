@@ -1,42 +1,38 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect, useRef } from 'react';
 import GlobalContext from '../../contexts/GlobalContext';
-import { WindowState } from '../../shared/interfaces';
+import { StartbarRef, WindowInfo, WindowState } from '../../shared/interfaces';
 import styles from './startbar.module.css';
 
-const StartBar = () => {
-  const { windowStates, setWindowsStates } = React.useContext(GlobalContext);
+interface StartbarProps {
+  startbarRefs: StartbarRef;
+  setStartbarRefs: (_value: StartbarRef) => void;
+}
 
-  function openTerminal() {
-    switch (windowStates.terminal) {
+const StartBar = (props: StartbarProps) => {
+  const terminalRef = useRef<HTMLButtonElement>(null);
+  const aboutRef = useRef<HTMLButtonElement>(null);
+
+  const windows = React.useContext(GlobalContext);
+
+  useEffect(() => {
+    props.setStartbarRefs({
+      ...props.startbarRefs,
+      terminal: terminalRef,
+      about: aboutRef,
+    });
+  }, []);
+
+  function onClickWindow(window: WindowInfo) {
+    switch (window.state) {
       case WindowState.Minimised:
-        setWindowsStates({ ...windowStates, terminal: WindowState.Maximised });
-        const terminal = document.getElementById('terminal');
-        setTimeout(() => terminal?.click(), 50);
+      case WindowState.Inactive:
+      case WindowState.Closed:
+        window.setState(WindowState.Open);
         break;
       case WindowState.Maximised:
       case WindowState.Open:
-        setWindowsStates({ ...windowStates, terminal: WindowState.Minimised });
-        break;
-      case WindowState.Closed:
-        setWindowsStates({ ...windowStates, terminal: WindowState.Open });
-        break;
-    }
-  }
-
-  function openAbout() {
-    switch (windowStates.about) {
-      case WindowState.Minimised:
-        setWindowsStates({ ...windowStates, about: WindowState.Maximised });
-        const about = document.getElementById('about');
-        setTimeout(() => about?.click(), 50);
-        break;
-      case WindowState.Maximised:
-      case WindowState.Open:
-        setWindowsStates({ ...windowStates, about: WindowState.Minimised });
-        break;
-      case WindowState.Closed:
-        setWindowsStates({ ...windowStates, about: WindowState.Open });
+        window.setState(WindowState.Minimised);
         break;
     }
   }
@@ -55,30 +51,30 @@ const StartBar = () => {
 
       {/* TERMINAL */}
       <button
-        id="terminalStartBar"
+        ref={terminalRef}
         className={
           styles.startbarIcon +
           ' ml-5 hover:bg-gray-700 ' +
-          (windowStates.terminal !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
-          ((windowStates.terminal === WindowState.Maximised || windowStates.terminal === WindowState.Open) &&
+          (windows.terminal.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.terminal.state === WindowState.Maximised || windows.terminal.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
         }
-        onClick={() => openTerminal()}
+        onClick={() => onClickWindow(windows.terminal)}
       >
         <Image src="/images/terminal-start-icon.png" height="348" width="348" layout="responsive" />
       </button>
 
       {/* ABOUT */}
       <button
-        id="aboutStartBar"
+        ref={aboutRef}
         className={
           styles.startbarIcon +
           ' ml-5 hover:bg-gray-700 ' +
-          (windowStates.about !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
-          ((windowStates.about === WindowState.Maximised || windowStates.about === WindowState.Open) &&
+          (windows.about.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.about.state === WindowState.Maximised || windows.about.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
         }
-        onClick={() => openAbout()}
+        onClick={() => onClickWindow(windows.about)}
       >
         <Image src="/images/about-icon.png" height="348" width="348" layout="responsive" />
       </button>
