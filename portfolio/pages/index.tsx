@@ -8,6 +8,7 @@ import Window from '../modals/window/window';
 import StartBar from '../components/startbar/startbar';
 import AboutModal from '../modals/about/about';
 import { GlobalProvider } from '../contexts/GlobalContext';
+import ResumeModal from '../modals/resume/resume';
 
 const Home: NextPage = () => {
   const [startbarRefs, setstartbarRefs] = useState<StartbarRef>({
@@ -23,6 +24,7 @@ const Home: NextPage = () => {
 
   const [terminalState, setTerminalState] = React.useState<WindowState>(WindowState.Closed);
   const [aboutState, setAboutState] = React.useState<WindowState>(WindowState.Closed);
+  const [resumeState, setResumeState] = React.useState<WindowState>(WindowState.Closed);
 
   const windows: Windows = {
     terminal: {
@@ -36,8 +38,8 @@ const Home: NextPage = () => {
       startbarRef: startbarRefs.about,
     },
     resume: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
+      state: resumeState,
+      setState: setResumeState,
       startbarRef: undefined,
     },
     projects: {
@@ -125,6 +127,25 @@ const Home: NextPage = () => {
                 startbarRef={startbarRefs.about}
               >
                 <AboutModal windowState={aboutState} setWindowState={setAboutState} />
+              </Window>
+            )}
+
+            {/* RESUME WINDOW */}
+            {resumeState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth / 1.5 >= 250 ? window.innerWidth / 1.5 : window.innerWidth;
+                }}
+                title="Current CV"
+                icon="/images/about-icon.png"
+                state={resumeState}
+                setState={setResumeState}
+                startbarRef={startbarRefs.resume}
+              >
+                <ResumeModal windowState={resumeState} setWindowState={setResumeState} />
               </Window>
             )}
           </main>

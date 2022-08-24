@@ -1,0 +1,17 @@
+.iframeLoader {
+  background:url(/images/loader.gif) center center no-repeat;
+}
+
+.notLoaded {
+  animation: notLoaded;
+  -webkit-animation-delay: 4.2s;
+  animation-delay: 4.2s;
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
+}
+
+@keyframes notLoaded {
+  to {
+    visibility: visible;
+  }
+}

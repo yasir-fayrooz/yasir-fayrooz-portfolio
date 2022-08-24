@@ -32,6 +32,15 @@ export function handleCommand(
       setCommandHistory([...commandHistory, aboutCommand]);
       windows.about.setState(WindowState.Open);
       break;
+    case 'resume':
+    case 'cv':
+      const resumeCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my current resume window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, resumeCommand]);
+      windows.resume.setState(WindowState.Open);
+      break;
     case 'cls':
     case 'clear':
       setCommandHistory([]);
