@@ -38,7 +38,8 @@ const AboutModal = (props: IWindowChildProps) => {
         <p className="mt-4">
           Since then, I have worked on a countless number of projects and experienced hands on work with clients while
           making some great work buddies along the way. I love to learn, love to teach others and love to solve complex
-          tasks which have never been tackled before.
+          tasks which have never been tackled before. I describe myself as a technology agnostic person who can adapt to
+          new tech super quickly.
         </p>
         <p className="mt-4">
           I’m familiar with a variety of programming languages, including Javascript/Typescript, HTML, CSS, a variety of

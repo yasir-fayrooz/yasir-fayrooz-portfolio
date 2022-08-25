@@ -9,6 +9,9 @@ import StartBar from '../components/startbar/startbar';
 import AboutModal from '../modals/about/about';
 import { GlobalProvider } from '../contexts/GlobalContext';
 import ResumeModal from '../modals/resume/resume';
+import SkillsModal from '../modals/skills/skills';
+import ProjectsModal from '../modals/projects/projects';
+import SocialsModal from '../modals/socials/socials';
 
 const Home: NextPage = () => {
   const [startbarRefs, setstartbarRefs] = useState<StartbarRef>({
@@ -25,6 +28,11 @@ const Home: NextPage = () => {
   const [terminalState, setTerminalState] = React.useState<WindowState>(WindowState.Closed);
   const [aboutState, setAboutState] = React.useState<WindowState>(WindowState.Closed);
   const [resumeState, setResumeState] = React.useState<WindowState>(WindowState.Closed);
+  const [projectsState, setProjectsState] = React.useState<WindowState>(WindowState.Closed);
+  const [skillsState, setSkillsState] = React.useState<WindowState>(WindowState.Closed);
+  const [socialsState, setSocialsState] = React.useState<WindowState>(WindowState.Closed);
+  const [websiteState, setWebsiteState] = React.useState<WindowState>(WindowState.Closed);
+  const [contactState, setContactState] = React.useState<WindowState>(WindowState.Closed);
 
   const windows: Windows = {
     terminal: {
@@ -43,29 +51,29 @@ const Home: NextPage = () => {
       startbarRef: undefined,
     },
     projects: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
-      startbarRef: undefined,
+      state: projectsState,
+      setState: setProjectsState,
+      startbarRef: startbarRefs.projects,
     },
     skills: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
-      startbarRef: undefined,
+      state: skillsState,
+      setState: setSkillsState,
+      startbarRef: startbarRefs.skills,
     },
     socials: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
-      startbarRef: undefined,
+      state: socialsState,
+      setState: setSocialsState,
+      startbarRef: startbarRefs.socials,
     },
     website: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
-      startbarRef: undefined,
+      state: websiteState,
+      setState: setWebsiteState,
+      startbarRef: startbarRefs.website,
     },
     contact: {
-      state: WindowState.Closed,
-      setState: (_value: WindowState) => {},
-      startbarRef: undefined,
+      state: contactState,
+      setState: setContactState,
+      startbarRef: startbarRefs.contact,
     },
   };
 
@@ -137,15 +145,91 @@ const Home: NextPage = () => {
                   return window.innerHeight;
                 }}
                 calcWidth={() => {
-                  return window.innerWidth / 1.5 >= 250 ? window.innerWidth / 1.5 : window.innerWidth;
+                  return window.innerWidth / 1.5 >= 500 ? window.innerWidth / 1.5 : window.innerWidth;
                 }}
                 title="Current CV"
-                icon="/images/about-icon.png"
+                icon="/images/resume-icon.png"
                 state={resumeState}
                 setState={setResumeState}
                 startbarRef={startbarRefs.resume}
               >
                 <ResumeModal windowState={resumeState} setWindowState={setResumeState} />
+              </Window>
+            )}
+
+            {/* PROJECTS WINDOW */}
+            {projectsState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth >= 600 ? 600 : window.innerWidth;
+                }}
+                title="Projects"
+                icon="/images/projects-icon.png"
+                state={projectsState}
+                setState={setProjectsState}
+                startbarRef={startbarRefs.projects}
+              >
+                <ProjectsModal windowState={projectsState} setWindowState={setProjectsState} />
+              </Window>
+            )}
+
+            {/* SKILLS WINDOW */}
+            {skillsState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth / 3 >= 250 ? window.innerWidth / 3 : window.innerWidth;
+                }}
+                title="Skills"
+                icon="/images/skills-icon.png"
+                state={skillsState}
+                setState={setSkillsState}
+                startbarRef={startbarRefs.skills}
+              >
+                <SkillsModal windowState={skillsState} setWindowState={setSkillsState} />
+              </Window>
+            )}
+
+            {/* SOCIALS WINDOW */}
+            {socialsState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight >= 250 ? 250 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth >= 200 ? 200 : window.innerWidth;
+                }}
+                title="Socials"
+                icon="/images/socials-icon.png"
+                state={socialsState}
+                setState={setSocialsState}
+                startbarRef={startbarRefs.socials}
+              >
+                <SocialsModal windowState={socialsState} setWindowState={setSocialsState} />
+              </Window>
+            )}
+
+            {/* WEBSITE WINDOW */}
+            {socialsState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight >= 250 ? 250 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth >= 200 ? 200 : window.innerWidth;
+                }}
+                title="Socials"
+                icon="/images/socials-icon.png"
+                state={socialsState}
+                setState={setSocialsState}
+                startbarRef={startbarRefs.socials}
+              >
+                <SocialsModal windowState={socialsState} setWindowState={setSocialsState} />
               </Window>
             )}
           </main>

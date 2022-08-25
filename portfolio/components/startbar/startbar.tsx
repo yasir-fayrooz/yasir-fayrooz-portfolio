@@ -12,6 +12,10 @@ interface StartbarProps {
 const StartBar = (props: StartbarProps) => {
   const terminalRef = useRef<HTMLButtonElement>(null);
   const aboutRef = useRef<HTMLButtonElement>(null);
+  const resumeRef = useRef<HTMLButtonElement>(null);
+  const projectsRef = useRef<HTMLButtonElement>(null);
+  const skillsRef = useRef<HTMLButtonElement>(null);
+  const socialsRef = useRef<HTMLButtonElement>(null);
 
   const windows = React.useContext(GlobalContext);
 
@@ -20,6 +24,10 @@ const StartBar = (props: StartbarProps) => {
       ...props.startbarRefs,
       terminal: terminalRef,
       about: aboutRef,
+      resume: resumeRef,
+      projects: projectsRef,
+      skills: skillsRef,
+      socials: socialsRef,
     });
   }, []);
 
@@ -77,6 +85,66 @@ const StartBar = (props: StartbarProps) => {
         onClick={() => onClickWindow(windows.about)}
       >
         <Image src="/images/about-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* RESUME */}
+      <button
+        ref={resumeRef}
+        className={
+          styles.startbarIcon +
+          ' ml-5 hover:bg-gray-700 ' +
+          (windows.resume.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.resume.state === WindowState.Maximised || windows.resume.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.resume)}
+      >
+        <Image src="/images/resume-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* PROJECTS */}
+      <button
+        ref={projectsRef}
+        className={
+          styles.startbarIcon +
+          ' ml-5 hover:bg-gray-700 ' +
+          (windows.projects.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.projects.state === WindowState.Maximised || windows.projects.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.projects)}
+      >
+        <Image src="/images/projects-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* SKILLS */}
+      <button
+        ref={skillsRef}
+        className={
+          styles.startbarIcon +
+          ' ml-5 hover:bg-gray-700 ' +
+          (windows.skills.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.skills.state === WindowState.Maximised || windows.skills.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.skills)}
+      >
+        <Image src="/images/skills-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* SOCIALS */}
+      <button
+        ref={socialsRef}
+        className={
+          styles.startbarIcon +
+          ' ml-5 hover:bg-gray-700 ' +
+          (windows.socials.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.socials.state === WindowState.Maximised || windows.socials.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.socials)}
+      >
+        <Image src="/images/socials-icon.png" height="348" width="348" layout="responsive" />
       </button>
     </div>
   );

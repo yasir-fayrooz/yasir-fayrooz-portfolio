@@ -42,11 +42,13 @@ export interface WindowInfo {
   startbarRef?: RefObject<HTMLButtonElement>;
 }
 
-export interface Project {
+export interface ProjectDesc {
   key: string;
   name: string;
-  markdownFile: string;
-  state: WindowState;
+  description: string;
+  fromDate: string;
+  toDate: string;
+  elementRef: () => JSX.Element;
 }
 
 export interface CommandHistory {

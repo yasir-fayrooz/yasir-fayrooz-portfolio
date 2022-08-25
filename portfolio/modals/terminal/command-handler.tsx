@@ -41,6 +41,30 @@ export function handleCommand(
       setCommandHistory([...commandHistory, resumeCommand]);
       windows.resume.setState(WindowState.Open);
       break;
+    case 'projects':
+      const projectsCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my projects window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, projectsCommand]);
+      windows.projects.setState(WindowState.Open);
+      break;
+    case 'skills':
+      const skillsCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my skills window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, skillsCommand]);
+      windows.skills.setState(WindowState.Open);
+      break;
+    case 'socials':
+      const socialsCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my socials window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, socialsCommand]);
+      windows.socials.setState(WindowState.Open);
+      break;
     case 'cls':
     case 'clear':
       setCommandHistory([]);
