@@ -135,7 +135,7 @@ async function MemeCommand() {
   if (resp.ok) {
     const data: any = await resp.json();
     return (
-      <div className="max-w-md max-h-md my-3">
+      <div className="max-w-md max-h-md my-3 mr-2">
         <Image src={data.preview.pop()} width="300" height="300" layout="responsive" />
       </div>
     );

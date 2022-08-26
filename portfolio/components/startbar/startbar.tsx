@@ -175,7 +175,7 @@ const StartBar = (props: StartbarProps) => {
   }
 
   return (
-    <div className="py-1 flex justify-center" ref={parentDiv}>
+    <div className={'py-1 flex justify-center ' + styles.fadeIn} ref={parentDiv}>
       {anchorPoint && (
         <ul
           ref={rightclickMenu}

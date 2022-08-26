@@ -74,6 +74,20 @@
 100% { transform: rotate( 0.0deg) }
 }
 
+
+.fadeIn{ 
+  opacity: 0;
+  animation: fade-in 3.5s forwards;
+  -webkit-animation: fade-in 3.5s forwards;
+  -webkit-animation-delay: 12.0s;
+  animation-delay: 12.0s;
+}
+  
+@keyframes fade-in {
+  100% { opacity: 1; }
+}
+
+
 @keyframes type-start2 {
   to {
     visibility: visible;

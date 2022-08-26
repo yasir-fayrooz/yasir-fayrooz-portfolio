@@ -101,7 +101,7 @@ const Home: NextPage = () => {
       <div className="flex flex-col w-full h-full bg-zinc-900">
         <EnteredProvider value={{ entered: entered, setEntered: setEntered }}>
           <GlobalProvider value={windows}>
-            <main className="grow">
+            <main className="grow overflow-auto">
               <div className="container mx-auto flex h-full">
                 <Intro />
               </div>
@@ -259,11 +259,13 @@ const Home: NextPage = () => {
               )}
             </main>
 
-            <footer>
-              <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3]">
-                <StartBar startbarRefs={startbarRefs} setStartbarRefs={setstartbarRefs} />
-              </div>
-            </footer>
+            {entered && (
+              <footer>
+                <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3] fadeInStartbar">
+                  <StartBar startbarRefs={startbarRefs} setStartbarRefs={setstartbarRefs} />
+                </div>
+              </footer>
+            )}
           </GlobalProvider>
         </EnteredProvider>
       </div>
