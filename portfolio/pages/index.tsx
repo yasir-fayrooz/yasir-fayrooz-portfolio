@@ -3,7 +3,7 @@ import Head from 'next/head';
 import React, { useRef, useState } from 'react';
 import Intro from '../components/intro/intro';
 import TerminalModal from '../modals/terminal/terminal';
-import { StartbarRef, Windows, WindowState } from '../shared/interfaces';
+import { IEntered, StartbarRef, Windows, WindowState } from '../shared/interfaces';
 import Window from '../modals/window/window';
 import StartBar from '../components/startbar/startbar';
 import AboutModal from '../modals/about/about';
@@ -14,8 +14,11 @@ import ProjectsModal from '../modals/projects/projects';
 import SocialsModal from '../modals/socials/socials';
 import WebsiteModal from '../modals/website/website';
 import ContactModal from '../modals/contact/contact';
+import { EnteredProvider } from '../contexts/EnteredContext';
 
 const Home: NextPage = () => {
+  const [entered, setEntered] = React.useState<boolean>(false);
+
   const [startbarRefs, setstartbarRefs] = useState<StartbarRef>({
     terminal: useRef(null),
     about: useRef(null),
@@ -96,171 +99,173 @@ const Home: NextPage = () => {
       </Head>
 
       <div className="flex flex-col w-full h-full bg-zinc-900">
-        <GlobalProvider value={windows}>
-          <main className="grow">
-            <div className="container mx-auto flex h-full">
-              <Intro />
-            </div>
+        <EnteredProvider value={{ entered: entered, setEntered: setEntered }}>
+          <GlobalProvider value={windows}>
+            <main className="grow">
+              <div className="container mx-auto flex h-full">
+                <Intro />
+              </div>
 
-            {/* TERMINAL WINDOW */}
-            {terminalState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight / 2 >= 250 ? window.innerHeight / 2 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth / 2 >= 350 ? window.innerWidth / 2 : window.innerWidth;
-                }}
-                title="Command Prompt"
-                icon="/images/terminal-icon.png"
-                state={terminalState}
-                setState={setTerminalState}
-                startbarRef={startbarRefs.terminal}
-              >
-                <TerminalModal windowState={terminalState} setWindowState={setTerminalState} />
-              </Window>
-            )}
+              {/* TERMINAL WINDOW */}
+              {terminalState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight / 2 >= 250 ? window.innerHeight / 2 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth / 2 >= 350 ? window.innerWidth / 2 : window.innerWidth;
+                  }}
+                  title="Command Prompt"
+                  icon="/images/terminal-icon.png"
+                  state={terminalState}
+                  setState={setTerminalState}
+                  startbarRef={startbarRefs.terminal}
+                >
+                  <TerminalModal windowState={terminalState} setWindowState={setTerminalState} />
+                </Window>
+              )}
 
-            {/* ABOUT WINDOW */}
-            {aboutState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight / 1.5 >= 250 ? window.innerHeight / 1.5 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth / 1.5 >= 400 ? window.innerWidth / 1.5 : window.innerWidth;
-                }}
-                title="About me"
-                icon="/images/about-icon.png"
-                state={aboutState}
-                setState={setAboutState}
-                startbarRef={startbarRefs.about}
-              >
-                <AboutModal windowState={aboutState} setWindowState={setAboutState} />
-              </Window>
-            )}
+              {/* ABOUT WINDOW */}
+              {aboutState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight / 1.5 >= 250 ? window.innerHeight / 1.5 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth / 1.5 >= 400 ? window.innerWidth / 1.5 : window.innerWidth;
+                  }}
+                  title="About me"
+                  icon="/images/about-icon.png"
+                  state={aboutState}
+                  setState={setAboutState}
+                  startbarRef={startbarRefs.about}
+                >
+                  <AboutModal windowState={aboutState} setWindowState={setAboutState} />
+                </Window>
+              )}
 
-            {/* RESUME WINDOW */}
-            {resumeState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth / 1.5 >= 500 ? window.innerWidth / 1.5 : window.innerWidth;
-                }}
-                title="Current CV"
-                icon="/images/resume-icon.png"
-                state={resumeState}
-                setState={setResumeState}
-                startbarRef={startbarRefs.resume}
-              >
-                <ResumeModal windowState={resumeState} setWindowState={setResumeState} />
-              </Window>
-            )}
+              {/* RESUME WINDOW */}
+              {resumeState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth / 1.5 >= 500 ? window.innerWidth / 1.5 : window.innerWidth;
+                  }}
+                  title="Current CV"
+                  icon="/images/resume-icon.png"
+                  state={resumeState}
+                  setState={setResumeState}
+                  startbarRef={startbarRefs.resume}
+                >
+                  <ResumeModal windowState={resumeState} setWindowState={setResumeState} />
+                </Window>
+              )}
 
-            {/* PROJECTS WINDOW */}
-            {projectsState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth >= 600 ? 600 : window.innerWidth;
-                }}
-                title="Projects"
-                icon="/images/projects-icon.png"
-                state={projectsState}
-                setState={setProjectsState}
-                startbarRef={startbarRefs.projects}
-              >
-                <ProjectsModal windowState={projectsState} setWindowState={setProjectsState} />
-              </Window>
-            )}
+              {/* PROJECTS WINDOW */}
+              {projectsState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth >= 600 ? 600 : window.innerWidth;
+                  }}
+                  title="Projects"
+                  icon="/images/projects-icon.png"
+                  state={projectsState}
+                  setState={setProjectsState}
+                  startbarRef={startbarRefs.projects}
+                >
+                  <ProjectsModal windowState={projectsState} setWindowState={setProjectsState} />
+                </Window>
+              )}
 
-            {/* SKILLS WINDOW */}
-            {skillsState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth / 3 >= 250 ? window.innerWidth / 3 : window.innerWidth;
-                }}
-                title="Skills"
-                icon="/images/skills-icon.png"
-                state={skillsState}
-                setState={setSkillsState}
-                startbarRef={startbarRefs.skills}
-              >
-                <SkillsModal windowState={skillsState} setWindowState={setSkillsState} />
-              </Window>
-            )}
+              {/* SKILLS WINDOW */}
+              {skillsState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight / 1.5 >= 450 ? window.innerHeight / 1.5 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth / 3 >= 250 ? window.innerWidth / 3 : window.innerWidth;
+                  }}
+                  title="Skills"
+                  icon="/images/skills-icon.png"
+                  state={skillsState}
+                  setState={setSkillsState}
+                  startbarRef={startbarRefs.skills}
+                >
+                  <SkillsModal windowState={skillsState} setWindowState={setSkillsState} />
+                </Window>
+              )}
 
-            {/* SOCIALS WINDOW */}
-            {socialsState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight >= 250 ? 250 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth >= 200 ? 200 : window.innerWidth;
-                }}
-                title="Socials"
-                icon="/images/socials-icon.png"
-                state={socialsState}
-                setState={setSocialsState}
-                startbarRef={startbarRefs.socials}
-              >
-                <SocialsModal windowState={socialsState} setWindowState={setSocialsState} />
-              </Window>
-            )}
+              {/* SOCIALS WINDOW */}
+              {socialsState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight >= 250 ? 250 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth >= 200 ? 200 : window.innerWidth;
+                  }}
+                  title="Socials"
+                  icon="/images/socials-icon.png"
+                  state={socialsState}
+                  setState={setSocialsState}
+                  startbarRef={startbarRefs.socials}
+                >
+                  <SocialsModal windowState={socialsState} setWindowState={setSocialsState} />
+                </Window>
+              )}
 
-            {/* WEBSITE WINDOW */}
-            {websiteState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight >= 500 ? 500 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth >= 700 ? 700 : window.innerWidth;
-                }}
-                title="Website"
-                icon="/images/website-icon.png"
-                state={websiteState}
-                setState={setWebsiteState}
-                startbarRef={startbarRefs.website}
-              >
-                <WebsiteModal windowState={websiteState} setWindowState={setWebsiteState} />
-              </Window>
-            )}
+              {/* WEBSITE WINDOW */}
+              {websiteState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight >= 500 ? 500 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth >= 700 ? 700 : window.innerWidth;
+                  }}
+                  title="Website"
+                  icon="/images/website-icon.png"
+                  state={websiteState}
+                  setState={setWebsiteState}
+                  startbarRef={startbarRefs.website}
+                >
+                  <WebsiteModal windowState={websiteState} setWindowState={setWebsiteState} />
+                </Window>
+              )}
 
-            {/* CONTACT WINDOW */}
-            {contactState !== WindowState.Closed && (
-              <Window
-                calcHeight={() => {
-                  return window.innerHeight >= 500 ? 500 : window.innerHeight;
-                }}
-                calcWidth={() => {
-                  return window.innerWidth >= 700 ? 700 : window.innerWidth;
-                }}
-                title="Contact me"
-                icon="/images/contact-icon.png"
-                state={contactState}
-                setState={setContactState}
-                startbarRef={startbarRefs.contact}
-              >
-                <ContactModal windowState={contactState} setWindowState={setContactState} />
-              </Window>
-            )}
-          </main>
+              {/* CONTACT WINDOW */}
+              {contactState !== WindowState.Closed && (
+                <Window
+                  calcHeight={() => {
+                    return window.innerHeight >= 500 ? 500 : window.innerHeight;
+                  }}
+                  calcWidth={() => {
+                    return window.innerWidth >= 700 ? 700 : window.innerWidth;
+                  }}
+                  title="Contact me"
+                  icon="/images/contact-icon.png"
+                  state={contactState}
+                  setState={setContactState}
+                  startbarRef={startbarRefs.contact}
+                >
+                  <ContactModal windowState={contactState} setWindowState={setContactState} />
+                </Window>
+              )}
+            </main>
 
-          <footer>
-            <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3]">
-              <StartBar startbarRefs={startbarRefs} setStartbarRefs={setstartbarRefs} />
-            </div>
-          </footer>
-        </GlobalProvider>
+            <footer>
+              <div className="pt-1 w-full bg-blue-500/[0.03] border-t border-black/[0.3]">
+                <StartBar startbarRefs={startbarRefs} setStartbarRefs={setstartbarRefs} />
+              </div>
+            </footer>
+          </GlobalProvider>
+        </EnteredProvider>
       </div>
     </div>
   );

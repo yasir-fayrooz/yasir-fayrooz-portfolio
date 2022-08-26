@@ -55,3 +55,15 @@ export interface CommandHistory {
   command: string;
   element: React.ReactElement;
 }
+
+export interface StartbarAction {
+  windowName: string;
+  windowRef: RefObject<HTMLButtonElement>;
+  windowState: WindowState;
+  setState: (_value: WindowState) => void;
+}
+
+export interface IEntered {
+  entered: boolean;
+  setEntered: (_value: boolean) => void;
+}

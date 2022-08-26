@@ -69,9 +69,9 @@ const TerminalModal = (props: IWindowChildProps) => {
     });
   }
 
-  function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
+  async function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (e.key === 'Enter') {
-      handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory, windows);
+      await handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory, windows);
       (e.target as HTMLTextAreaElement).value = '';
       setCommandInput('');
     }

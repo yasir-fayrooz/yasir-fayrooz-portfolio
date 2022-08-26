@@ -1,6 +1,7 @@
 import GlobalContext from '../../contexts/GlobalContext';
 import { CommandHistory, Windows, WindowState } from '../../shared/interfaces';
 import { help, IHelp } from './commands';
+import Image from 'next/image';
 
 export enum CommandState {
   ROOT,
@@ -12,7 +13,7 @@ export enum CommandState {
 
 export let commandState: CommandState = CommandState.ROOT;
 
-export function handleCommand(
+export async function handleCommand(
   commandInput: string,
   commandHistory: CommandHistory[],
   setCommandHistory: React.Dispatch<React.SetStateAction<CommandHistory[]>>,
@@ -81,6 +82,15 @@ export function handleCommand(
       setCommandHistory([...commandHistory, contactCommand]);
       windows.contact.setState(WindowState.Open);
       break;
+    case 'meme':
+      const memeCommand: CommandHistory = {
+        command: commandInput,
+        element: await MemeCommand().then((resp) => {
+          return resp;
+        }),
+      };
+      setCommandHistory([...commandHistory, memeCommand]);
+      break;
     case 'cls':
     case 'clear':
       setCommandHistory([]);
@@ -113,6 +123,25 @@ function HelpCommand() {
       })}
     </>
   );
+}
+
+async function MemeCommand() {
+  const errorEl: JSX.Element = (
+    <p>Oh no, an error has occurred fetching your meme. Please contact me and I will resolve this asap :(</p>
+  );
+
+  const resp = await fetch('https://meme-api.herokuapp.com/gimme');
+
+  if (resp.ok) {
+    const data: any = await resp.json();
+    return (
+      <div className="max-w-md max-h-md my-3">
+        <Image src={data.preview.pop()} width="300" height="300" layout="responsive" />
+      </div>
+    );
+  } else {
+    return <p>Oh no, an error has occurred fetching your meme. Please contact me and I will resolve this asap :(</p>;
+  }
 }
 
 function OpenWindowCommand(text: string) {

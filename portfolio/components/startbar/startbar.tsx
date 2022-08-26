@@ -1,7 +1,8 @@
 import Image from 'next/image';
-import React, { useEffect, useRef } from 'react';
+import React, { RefObject, useEffect, useRef } from 'react';
+import { isNullOrUndefined } from 'util';
 import GlobalContext from '../../contexts/GlobalContext';
-import { StartbarRef, WindowInfo, WindowState } from '../../shared/interfaces';
+import { StartbarAction, StartbarRef, WindowInfo, WindowState } from '../../shared/interfaces';
 import styles from './startbar.module.css';
 
 interface StartbarProps {
@@ -10,6 +11,9 @@ interface StartbarProps {
 }
 
 const StartBar = (props: StartbarProps) => {
+  const parentDiv = useRef<HTMLDivElement>(null);
+  const rightclickMenu = useRef<HTMLUListElement>(null);
+
   const terminalRef = useRef<HTMLButtonElement>(null);
   const aboutRef = useRef<HTMLButtonElement>(null);
   const resumeRef = useRef<HTMLButtonElement>(null);
@@ -35,6 +39,127 @@ const StartBar = (props: StartbarProps) => {
     });
   }, []);
 
+  const [anchorPoint, setAnchorPoint] = React.useState<StartbarAction | undefined>(undefined);
+
+  useEffect(() => {
+    document.addEventListener('contextmenu', handleRightClick, true);
+    return () => {
+      document.removeEventListener('contextmenu', handleRightClick, true);
+    };
+  }, []);
+
+  const handleRightClick = React.useCallback(
+    (event: MouseEvent) => {
+      if (parentDiv.current?.contains(event.target as Node)) {
+        event.preventDefault();
+        //get where in start bar we clicked
+        const ref = getRightClickTarget(event);
+
+        if (ref) {
+          const info = getRefWindowState(ref);
+
+          setAnchorPoint({
+            windowName: info.windowName,
+            windowState: info.windowState,
+            windowRef: info.windowRef,
+            setState: info.setState,
+          });
+        }
+      }
+    },
+    [setAnchorPoint]
+  );
+
+  const handleClick = React.useCallback(() => anchorPoint && setAnchorPoint(undefined), [anchorPoint]);
+
+  useEffect(() => {
+    document.addEventListener('click', handleClick);
+    return () => {
+      document.removeEventListener('click', handleClick);
+    };
+  });
+
+  function getRightClickTarget(e: MouseEvent) {
+    if (terminalRef.current?.contains(e.target as Node)) return terminalRef;
+    if (aboutRef.current?.contains(e.target as Node)) return aboutRef;
+    if (resumeRef.current?.contains(e.target as Node)) return resumeRef;
+    if (projectsRef.current?.contains(e.target as Node)) return projectsRef;
+    if (skillsRef.current?.contains(e.target as Node)) return skillsRef;
+    if (socialsRef.current?.contains(e.target as Node)) return socialsRef;
+    if (websiteRef.current?.contains(e.target as Node)) return websiteRef;
+    if (contactRef.current?.contains(e.target as Node)) return contactRef;
+
+    return null;
+  }
+
+  function getRefWindowState(ref: RefObject<HTMLButtonElement>) {
+    switch (ref) {
+      case terminalRef:
+        return {
+          windowName: 'Terminal',
+          windowState: windows.terminal.state,
+          windowRef: terminalRef,
+          setState: windows.terminal.setState,
+        };
+      case aboutRef:
+        return {
+          windowName: 'About',
+          windowState: windows.about.state,
+          windowRef: aboutRef,
+          setState: windows.about.setState,
+        };
+      case resumeRef:
+        return {
+          windowName: 'Resume',
+          windowState: windows.resume.state,
+          windowRef: resumeRef,
+          setState: windows.resume.setState,
+        };
+      case projectsRef:
+        return {
+          windowName: 'Projects',
+          windowState: windows.projects.state,
+          windowRef: projectsRef,
+          setState: windows.projects.setState,
+        };
+      case skillsRef:
+        return {
+          windowName: 'Skills',
+          windowState: windows.skills.state,
+          windowRef: skillsRef,
+          setState: windows.skills.setState,
+        };
+      case socialsRef:
+        return {
+          windowName: 'Socials',
+          windowState: windows.socials.state,
+          windowRef: socialsRef,
+          setState: windows.socials.setState,
+        };
+      case websiteRef:
+        return {
+          windowName: 'Website',
+          windowState: windows.website.state,
+          windowRef: websiteRef,
+          setState: windows.website.setState,
+        };
+      case contactRef:
+        return {
+          windowName: 'Contact',
+          windowState: windows.contact.state,
+          windowRef: contactRef,
+          setState: windows.contact.setState,
+        };
+      default:
+        return {
+          windowName: 'Window',
+          windowState: WindowState.Closed,
+          windowRef: terminalRef,
+          setState: windows.terminal.setState,
+        };
+    }
+  }
+
   function onClickWindow(window: WindowInfo) {
     switch (window.state) {
       case WindowState.Minimised:
@@ -50,7 +175,30 @@ const StartBar = (props: StartbarProps) => {
   }
 
   return (
-    <div className="py-1 flex justify-center">
+    <div className="py-1 flex justify-center" ref={parentDiv}>
+      {anchorPoint && (
+        <ul
+          ref={rightclickMenu}
+          className="absolute bg-zinc-800 border border-black/[0.3] rounded-xl p-2 cursor-pointer"
+          style={{
+            bottom: 45,
+            left:
+              window.innerWidth < 500
+                ? window.innerWidth / 2 - (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0)
+                : anchorPoint.windowRef.current!.getBoundingClientRect().x -
+                  (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0),
+            zIndex: 10,
+          }}
+        >
+          <li className="p-2 rounded hover:bg-blue-500/[0.06]" onClick={() => anchorPoint.setState(WindowState.Open)}>
+            Open {anchorPoint.windowName}
+          </li>
+          <hr />
+          <li className="p-2 rounded hover:bg-blue-500/[0.06]" onClick={() => anchorPoint.setState(WindowState.Closed)}>
+            Exit {anchorPoint.windowName}
+          </li>
+        </ul>
+      )}
       <button disabled className={styles.startbarIcon}>
         <Image src="/images/start-icon.png" height="348" width="348" layout="responsive" />
       </button>
@@ -64,6 +212,7 @@ const StartBar = (props: StartbarProps) => {
       {/* TERMINAL */}
       <button
         ref={terminalRef}
+        title="Terminal"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -79,6 +228,7 @@ const StartBar = (props: StartbarProps) => {
       {/* ABOUT */}
       <button
         ref={aboutRef}
+        title="About"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -94,6 +244,7 @@ const StartBar = (props: StartbarProps) => {
       {/* RESUME */}
       <button
         ref={resumeRef}
+        title="Resume"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -109,6 +260,7 @@ const StartBar = (props: StartbarProps) => {
       {/* PROJECTS */}
       <button
         ref={projectsRef}
+        title="Projects"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -124,6 +276,7 @@ const StartBar = (props: StartbarProps) => {
       {/* SKILLS */}
       <button
         ref={skillsRef}
+        title="Skills"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -139,6 +292,7 @@ const StartBar = (props: StartbarProps) => {
       {/* SOCIALS */}
       <button
         ref={socialsRef}
+        title="Socials"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -154,6 +308,7 @@ const StartBar = (props: StartbarProps) => {
       {/* WEBSITE */}
       <button
         ref={websiteRef}
+        title="Website"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +
@@ -169,6 +324,7 @@ const StartBar = (props: StartbarProps) => {
       {/* CONTACT */}
       <button
         ref={contactRef}
+        title="Contact"
         className={
           styles.startbarIcon +
           ' ml-2 hover:bg-gray-700 ' +

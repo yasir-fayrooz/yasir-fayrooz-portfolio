@@ -18,13 +18,27 @@ const WebsiteModal = (props: IWindowChildProps) => {
           I want to be known as a technology agnostic person. I can learn and adapt to new languages, frameworks and/or
           technologies quite quickly as seen with this website I created.
         </p>
-        <h3 className="mt-2">Tech stack:</h3>
-        <p>- React</p>
-        <p>- Next.Js</p>
-        <p>- TailwindCSS</p>
-        <p>- Git</p>
-        <p>- LaTeX (for resume)</p>
-        <p>- latexonline.cc API (to compile my resume)</p>
+
+        <div className="my-2">
+          <h3>Tech stack:</h3>
+          <p>- React</p>
+          <p>- Next.Js</p>
+          <p>- TailwindCSS</p>
+          <p>- Git</p>
+          <p>
+            - D3vd Meme_Api for terminal memes. Credit:{' '}
+            <a
+              className="text-sky-300 underline cursor-pointer"
+              href="https://github.com/D3vd/Meme_Api"
+              target="_blank"
+            >
+              here
+            </a>
+          </p>
+          <p>- LaTeX (to create my resume)</p>
+          <p>- latexonline.cc API (to compile my resume)</p>
+          <p>- EmailJS for sending emails to myself</p>
+        </div>
       </div>
     </div>
   );

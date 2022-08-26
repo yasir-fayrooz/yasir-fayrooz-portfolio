@@ -48,6 +48,10 @@ export const help: IHelp[] = [
     description: 'Bring on the spam',
   },
   {
+    command: ['meme'],
+    description: 'Show me a random meme from the internet! 🤡',
+  },
+  {
     command: ['clear', 'cls'],
     description: 'Cleans the terminal when it gets too dirty 🧹',
   },

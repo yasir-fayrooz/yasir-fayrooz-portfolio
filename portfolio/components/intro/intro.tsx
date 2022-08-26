@@ -1,12 +1,13 @@
 import React from 'react';
+import EnteredContext from '../../contexts/EnteredContext';
 import Blinker from '../blinker/blinker';
 import IntroText from './intro-text';
 
 const Intro = () => {
-  const [enter, setEnter] = React.useState(false);
+  const hasEntered = React.useContext(EnteredContext);
 
   function openWebsite() {
-    setEnter(true);
+    hasEntered.setEntered(true);
 
     const audio = new Audio('./audio/typing.m4a');
     audio.play();
@@ -29,7 +30,7 @@ const Intro = () => {
 
         {/* INTRO TEXT */}
         <div>
-          {!enter ? (
+          {!hasEntered.entered ? (
             <button
               onClick={() => openWebsite()}
               className="flex mx-auto mt-12 xxxs:mt-5 font-bold p-3 px-12 rounded-xl bg-blue-500/75 hover:bg-blue-600/75 shadow-lg shadow-gray-500/25 hover:shadow-gray-400/25 animate-bounce transition-all ease-in-out delay-150"

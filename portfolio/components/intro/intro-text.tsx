@@ -2,9 +2,11 @@ import styles from './intro-text.module.css';
 import React from 'react';
 import GlobalContext from '../../contexts/GlobalContext';
 import { WindowState } from '../../shared/interfaces';
+import EnteredContext from '../../contexts/EnteredContext';
 
 const IntroText = () => {
   const { terminal } = React.useContext(GlobalContext);
+  const { entered } = React.useContext(EnteredContext);
 
   return (
     <>
@@ -30,6 +32,15 @@ const IntroText = () => {
           </span>
         </p>
       </div>
+
+      {entered && (
+        <div className="text-sky-300 underline cursor-pointer">
+          <div className="flex absolute top-[25%]">
+            <p className="grow">/About</p>
+            <p className="grow">/Resume</p>
+          </div>
+        </div>
+      )}
     </>
   );
 };

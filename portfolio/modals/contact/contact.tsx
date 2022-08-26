@@ -82,7 +82,7 @@ const ContactModal = (props: IWindowChildProps) => {
           <input
             ref={fromInput}
             type="email"
-            className="w-full col-span-10 p-2 text-gray-500 bg-slate-300 outline-none border-2 border-b-green-500 rounded"
+            className="w-full col-span-10 p-2 text-black bg-slate-300 outline-none border-2 border-b-green-500 rounded"
             placeholder="Enter your email address here"
             name="email"
             onChange={() => validateForm()}
@@ -96,7 +96,7 @@ const ContactModal = (props: IWindowChildProps) => {
             type="text"
             name="name"
             autoComplete="off"
-            className="w-full col-span-10 p-2 text-gray-500 bg-slate-300 outline-none border-2 border-b-green-500 rounded"
+            className="w-full col-span-10 p-2 text-black bg-slate-300 outline-none border-2 border-b-green-500 rounded"
             placeholder="Enter your name"
             onChange={() => validateForm()}
           />
@@ -109,7 +109,7 @@ const ContactModal = (props: IWindowChildProps) => {
             type="text"
             name="subject"
             autoComplete="off"
-            className="w-full col-span-10 p-2 text-gray-500 bg-slate-300 outline-none border-2 border-b-green-500 rounded"
+            className="w-full col-span-10 p-2 text-black bg-slate-300 outline-none border-2 border-b-green-500 rounded"
             placeholder="Subject of the email"
             onChange={() => validateForm()}
           />
@@ -121,7 +121,7 @@ const ContactModal = (props: IWindowChildProps) => {
             ref={messageInput}
             name="message"
             autoComplete="off"
-            className="h-full resize-none col-span-10 p-2 text-gray-500 bg-slate-300 outline-none border-2 border-b-green-500 rounded"
+            className="h-full resize-none col-span-10 p-2 text-black bg-slate-300 outline-none border-2 border-b-green-500 rounded"
             placeholder="Email message"
             onChange={() => validateForm()}
           ></textarea>
