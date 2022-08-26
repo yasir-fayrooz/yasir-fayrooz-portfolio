@@ -16,6 +16,8 @@ const StartBar = (props: StartbarProps) => {
   const projectsRef = useRef<HTMLButtonElement>(null);
   const skillsRef = useRef<HTMLButtonElement>(null);
   const socialsRef = useRef<HTMLButtonElement>(null);
+  const websiteRef = useRef<HTMLButtonElement>(null);
+  const contactRef = useRef<HTMLButtonElement>(null);
 
   const windows = React.useContext(GlobalContext);
 
@@ -28,6 +30,8 @@ const StartBar = (props: StartbarProps) => {
       projects: projectsRef,
       skills: skillsRef,
       socials: socialsRef,
+      website: websiteRef,
+      contact: contactRef,
     });
   }, []);
 
@@ -47,13 +51,13 @@ const StartBar = (props: StartbarProps) => {
 
   return (
     <div className="py-1 flex justify-center">
-      <button disabled className={styles.startbarIcon + ' ml-2'}>
+      <button disabled className={styles.startbarIcon}>
         <Image src="/images/start-icon.png" height="348" width="348" layout="responsive" />
       </button>
-      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-5'}>
+      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-2'}>
         <Image src="/images/search-icon.png" height="348" width="348" layout="responsive" />
       </button>
-      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-5'}>
+      <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-2'}>
         <Image src="/images/folder-icon.png" height="348" width="348" layout="responsive" />
       </button>
 
@@ -62,7 +66,7 @@ const StartBar = (props: StartbarProps) => {
         ref={terminalRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.terminal.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.terminal.state === WindowState.Maximised || windows.terminal.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -77,7 +81,7 @@ const StartBar = (props: StartbarProps) => {
         ref={aboutRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.about.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.about.state === WindowState.Maximised || windows.about.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -92,7 +96,7 @@ const StartBar = (props: StartbarProps) => {
         ref={resumeRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.resume.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.resume.state === WindowState.Maximised || windows.resume.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -107,7 +111,7 @@ const StartBar = (props: StartbarProps) => {
         ref={projectsRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.projects.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.projects.state === WindowState.Maximised || windows.projects.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -122,7 +126,7 @@ const StartBar = (props: StartbarProps) => {
         ref={skillsRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.skills.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.skills.state === WindowState.Maximised || windows.skills.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -137,7 +141,7 @@ const StartBar = (props: StartbarProps) => {
         ref={socialsRef}
         className={
           styles.startbarIcon +
-          ' ml-5 hover:bg-gray-700 ' +
+          ' ml-2 hover:bg-gray-700 ' +
           (windows.socials.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
           ((windows.socials.state === WindowState.Maximised || windows.socials.state === WindowState.Open) &&
             'bg-gray-600/[0.9]')
@@ -145,6 +149,36 @@ const StartBar = (props: StartbarProps) => {
         onClick={() => onClickWindow(windows.socials)}
       >
         <Image src="/images/socials-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* WEBSITE */}
+      <button
+        ref={websiteRef}
+        className={
+          styles.startbarIcon +
+          ' ml-2 hover:bg-gray-700 ' +
+          (windows.website.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.website.state === WindowState.Maximised || windows.website.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.website)}
+      >
+        <Image src="/images/website-icon.png" height="348" width="348" layout="responsive" />
+      </button>
+
+      {/* CONTACT */}
+      <button
+        ref={contactRef}
+        className={
+          styles.startbarIcon +
+          ' ml-2 hover:bg-gray-700 ' +
+          (windows.contact.state !== WindowState.Closed && 'border-blue-700 border-b-2 ') +
+          ((windows.contact.state === WindowState.Maximised || windows.contact.state === WindowState.Open) &&
+            'bg-gray-600/[0.9]')
+        }
+        onClick={() => onClickWindow(windows.contact)}
+      >
+        <Image src="/images/contact-icon.png" height="348" width="348" layout="responsive" />
       </button>
     </div>
   );

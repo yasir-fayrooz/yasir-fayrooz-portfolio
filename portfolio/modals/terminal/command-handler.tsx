@@ -65,6 +65,22 @@ export function handleCommand(
       setCommandHistory([...commandHistory, socialsCommand]);
       windows.socials.setState(WindowState.Open);
       break;
+    case 'website':
+      const websiteCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my website window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, websiteCommand]);
+      windows.website.setState(WindowState.Open);
+      break;
+    case 'contact':
+      const contactCommand: CommandHistory = {
+        command: commandInput,
+        element: OpenWindowCommand('🚀 Opening my contact window.. 🚀'),
+      };
+      setCommandHistory([...commandHistory, contactCommand]);
+      windows.contact.setState(WindowState.Open);
+      break;
     case 'cls':
     case 'clear':
       setCommandHistory([]);

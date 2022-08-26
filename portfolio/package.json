@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@emailjs/browser": "^3.6.2",
     "@react-hook/window-size": "^3.0.7",
     "@rooks/use-previous-different": "^4.11.2",
     "next": "12.2.5",

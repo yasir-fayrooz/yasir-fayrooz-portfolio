@@ -190,7 +190,7 @@ export const AIPacman = () => {
         watch our presentation below:
       </p>
       <iframe
-        width="560"
+        width={window.innerWidth < 450 ? '360' : '560'}
         height="315"
         src="https://www.youtube.com/embed/pOlKvY68YU0"
         title="Art-of-fish-oil-intelligence Presentation"

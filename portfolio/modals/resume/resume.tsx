@@ -17,7 +17,7 @@ const ResumeModal = (props: IWindowChildProps) => {
         className="grow"
         onLoad={() => setLoaded(true)}
         title="Resume"
-        src="https://texlive2020.latexonline.cc/compile?git=https://github.com/yasir-fayrooz/yasir-fayrooz-resume&target=resume.tex&command=xelatex" //&force=true to force re-compile
+        src="https://texlive2020.latexonline.cc/compile?git=https://github.com/yasir-fayrooz/yasir-fayrooz-resume&target=resume.tex&command=xelatex&force=true" //&force=true to force re-compile
       ></iframe>
 
       {!loaded && (

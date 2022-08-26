@@ -12,6 +12,8 @@ import ResumeModal from '../modals/resume/resume';
 import SkillsModal from '../modals/skills/skills';
 import ProjectsModal from '../modals/projects/projects';
 import SocialsModal from '../modals/socials/socials';
+import WebsiteModal from '../modals/website/website';
+import ContactModal from '../modals/contact/contact';
 
 const Home: NextPage = () => {
   const [startbarRefs, setstartbarRefs] = useState<StartbarRef>({
@@ -126,7 +128,7 @@ const Home: NextPage = () => {
                   return window.innerHeight / 1.5 >= 250 ? window.innerHeight / 1.5 : window.innerHeight;
                 }}
                 calcWidth={() => {
-                  return window.innerWidth / 1.5 >= 250 ? window.innerWidth / 1.5 : window.innerWidth;
+                  return window.innerWidth / 1.5 >= 400 ? window.innerWidth / 1.5 : window.innerWidth;
                 }}
                 title="About me"
                 icon="/images/about-icon.png"
@@ -215,21 +217,40 @@ const Home: NextPage = () => {
             )}
 
             {/* WEBSITE WINDOW */}
-            {socialsState !== WindowState.Closed && (
+            {websiteState !== WindowState.Closed && (
               <Window
                 calcHeight={() => {
-                  return window.innerHeight >= 250 ? 250 : window.innerHeight;
+                  return window.innerHeight >= 500 ? 500 : window.innerHeight;
                 }}
                 calcWidth={() => {
-                  return window.innerWidth >= 200 ? 200 : window.innerWidth;
+                  return window.innerWidth >= 700 ? 700 : window.innerWidth;
                 }}
-                title="Socials"
-                icon="/images/socials-icon.png"
-                state={socialsState}
-                setState={setSocialsState}
-                startbarRef={startbarRefs.socials}
+                title="Website"
+                icon="/images/website-icon.png"
+                state={websiteState}
+                setState={setWebsiteState}
+                startbarRef={startbarRefs.website}
               >
-                <SocialsModal windowState={socialsState} setWindowState={setSocialsState} />
+                <WebsiteModal windowState={websiteState} setWindowState={setWebsiteState} />
+              </Window>
+            )}
+
+            {/* CONTACT WINDOW */}
+            {contactState !== WindowState.Closed && (
+              <Window
+                calcHeight={() => {
+                  return window.innerHeight >= 500 ? 500 : window.innerHeight;
+                }}
+                calcWidth={() => {
+                  return window.innerWidth >= 700 ? 700 : window.innerWidth;
+                }}
+                title="Contact me"
+                icon="/images/contact-icon.png"
+                state={contactState}
+                setState={setContactState}
+                startbarRef={startbarRefs.contact}
+              >
+                <ContactModal windowState={contactState} setWindowState={setContactState} />
               </Window>
             )}
           </main>
