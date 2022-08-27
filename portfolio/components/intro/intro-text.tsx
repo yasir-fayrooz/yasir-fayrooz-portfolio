@@ -12,10 +12,10 @@ const IntroText = () => {
     <>
       <div className={styles.text + ' ' + styles.typing}>
         <p>
-          \[._.]/ Hey there <span className={styles.wave}>👋</span> I'm Yasir Fayrooz
+          \[._.]/ Hey there <span className={styles.wave}>👋</span> I&apos;m Yasir Fayrooz
         </p>
         <p>
-          <span className="text-green-300">$ </span> A "Full Stack" Engineer
+          <span className="text-green-300">$ </span> A &quot;Full Stack&quot; Engineer
         </p>
         <p>
           <span className="text-green-300">$ </span> Welcome to my world

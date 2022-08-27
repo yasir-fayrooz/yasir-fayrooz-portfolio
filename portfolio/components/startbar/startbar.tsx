@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import React, { RefObject, useEffect, useRef } from 'react';
-import { isNullOrUndefined } from 'util';
 import GlobalContext from '../../contexts/GlobalContext';
 import { StartbarAction, StartbarRef, WindowInfo, WindowState } from '../../shared/interfaces';
 import styles from './startbar.module.css';
@@ -27,7 +26,6 @@ const StartBar = (props: StartbarProps) => {
 
   useEffect(() => {
     props.setStartbarRefs({
-      ...props.startbarRefs,
       terminal: terminalRef,
       about: aboutRef,
       resume: resumeRef,
@@ -187,7 +185,7 @@ const StartBar = (props: StartbarProps) => {
                 ? window.innerWidth / 2 - (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0)
                 : anchorPoint.windowRef.current!.getBoundingClientRect().x -
                   (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0),
-            zIndex: 10,
+            zIndex: 9999,
           }}
         >
           <li className="p-2 rounded hover:bg-blue-500/[0.06]" onClick={() => anchorPoint.setState(WindowState.Open)}>
@@ -200,13 +198,13 @@ const StartBar = (props: StartbarProps) => {
         </ul>
       )}
       <button disabled className={styles.startbarIcon}>
-        <Image src="/images/start-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/start-icon.png" height="348" width="348" layout="responsive" alt="Start" />
       </button>
       <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-2'}>
-        <Image src="/images/search-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/search-icon.png" height="348" width="348" layout="responsive" alt="Search" />
       </button>
       <button disabled className={styles.startbarIcon + ' xxxs:hidden ml-2'}>
-        <Image src="/images/folder-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/folder-icon.png" height="348" width="348" layout="responsive" alt="Folder" />
       </button>
 
       {/* TERMINAL */}
@@ -222,7 +220,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.terminal)}
       >
-        <Image src="/images/terminal-start-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/terminal-start-icon.png" height="348" width="348" layout="responsive" alt="Terminal" />
       </button>
 
       {/* ABOUT */}
@@ -238,7 +236,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.about)}
       >
-        <Image src="/images/about-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/about-icon.png" height="348" width="348" layout="responsive" alt="About" />
       </button>
 
       {/* RESUME */}
@@ -254,7 +252,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.resume)}
       >
-        <Image src="/images/resume-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/resume-icon.png" height="348" width="348" layout="responsive" alt="Resume" />
       </button>
 
       {/* PROJECTS */}
@@ -270,7 +268,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.projects)}
       >
-        <Image src="/images/projects-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/projects-icon.png" height="348" width="348" layout="responsive" alt="Projects" />
       </button>
 
       {/* SKILLS */}
@@ -286,7 +284,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.skills)}
       >
-        <Image src="/images/skills-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/skills-icon.png" height="348" width="348" layout="responsive" alt="Skills" />
       </button>
 
       {/* SOCIALS */}
@@ -302,7 +300,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.socials)}
       >
-        <Image src="/images/socials-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/socials-icon.png" height="348" width="348" layout="responsive" alt="Socials" />
       </button>
 
       {/* WEBSITE */}
@@ -318,7 +316,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.website)}
       >
-        <Image src="/images/website-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/website-icon.png" height="348" width="348" layout="responsive" alt="Website" />
       </button>
 
       {/* CONTACT */}
@@ -334,7 +332,7 @@ const StartBar = (props: StartbarProps) => {
         }
         onClick={() => onClickWindow(windows.contact)}
       >
-        <Image src="/images/contact-icon.png" height="348" width="348" layout="responsive" />
+        <Image src="/images/contact-icon.png" height="348" width="348" layout="responsive" alt="Contact" />
       </button>
     </div>
   );

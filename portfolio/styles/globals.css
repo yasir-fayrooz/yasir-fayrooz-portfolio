@@ -45,6 +45,8 @@ h3 {
 
 .fadeInStartbar{ 
   opacity: 0;
+  height: 0;
+  overflow: hidden;
   animation: fade-in 3.5s forwards;
   -webkit-animation: fade-in 3.5s forwards;
   -webkit-animation-delay: 12.0s;
@@ -52,5 +54,6 @@ h3 {
 }
   
 @keyframes fade-in {
-  100% { opacity: 1; }
+  0% {overflow: unset; height: auto;}
+  100% { overflow: unset; height: auto; opacity: 1; }
 }

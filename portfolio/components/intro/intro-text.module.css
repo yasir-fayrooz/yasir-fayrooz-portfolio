@@ -76,6 +76,8 @@
 
 
 .fadeIn{ 
+  height: 0;
+  overflow: hidden;
   opacity: 0;
   animation: fade-in 3.5s forwards;
   -webkit-animation: fade-in 3.5s forwards;
@@ -84,7 +86,8 @@
 }
   
 @keyframes fade-in {
-  100% { opacity: 1; }
+  0%{ height: auto; overflow:unset; }
+  100% { height: auto; overflow:unset; opacity: 1; }
 }
 
 

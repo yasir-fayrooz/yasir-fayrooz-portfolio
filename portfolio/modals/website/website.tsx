@@ -25,6 +25,7 @@ const WebsiteModal = (props: IWindowChildProps) => {
           <p>- Next.Js</p>
           <p>- TailwindCSS</p>
           <p>- Git</p>
+          <p>- Google Firebase to host my static files</p>
           <p>
             - D3vd Meme_Api for terminal memes. Credit:{' '}
             <a
@@ -38,6 +39,9 @@ const WebsiteModal = (props: IWindowChildProps) => {
           <p>- LaTeX (to create my resume)</p>
           <p>- latexonline.cc API (to compile my resume)</p>
           <p>- EmailJS for sending emails to myself</p>
+          <p>
+            - A bunch of npm packages. Feel free to contact me if you have any questions on how I developed something.
+          </p>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import EnteredContext from '../../contexts/EnteredContext';
 import Blinker from '../blinker/blinker';
 import IntroText from './intro-text';
@@ -7,10 +7,13 @@ const Intro = () => {
   const hasEntered = React.useContext(EnteredContext);
 
   function openWebsite() {
-    hasEntered.setEntered(true);
-
     const audio = new Audio('./audio/typing.m4a');
+
     audio.play();
+
+    audio.onplaying = (e) => {
+      hasEntered.setEntered(true);
+    };
   }
 
   return (

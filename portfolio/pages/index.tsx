@@ -1,9 +1,10 @@
 import type { NextPage } from 'next';
+import styles from '../styles/home.module.css';
 import Head from 'next/head';
 import React, { useRef, useState } from 'react';
 import Intro from '../components/intro/intro';
 import TerminalModal from '../modals/terminal/terminal';
-import { IEntered, StartbarRef, Windows, WindowState } from '../shared/interfaces';
+import { StartbarRef, Windows, WindowState } from '../shared/interfaces';
 import Window from '../modals/window/window';
 import StartBar from '../components/startbar/startbar';
 import AboutModal from '../modals/about/about';
@@ -83,21 +84,10 @@ const Home: NextPage = () => {
   };
 
   return (
-    <div className="w-screen h-screen">
+    <div className={'w-full ' + styles.mobile}>
       <Head>
         <title>Yasir Fayrooz - Portfolio</title>
-        <meta name="description" content="Yasir Fayrooz Portfolio - Resume, Git, LinkedIn, Contact, Projects, About" />
-        <link rel="icon" href="/favicon.ico" />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
-        />
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;700&display=swap"
-        />
       </Head>
-
       <div className="flex flex-col w-full h-full bg-zinc-900">
         <EnteredProvider value={{ entered: entered, setEntered: setEntered }}>
           <GlobalProvider value={windows}>

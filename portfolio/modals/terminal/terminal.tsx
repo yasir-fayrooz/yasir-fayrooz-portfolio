@@ -1,17 +1,17 @@
 import styles from './terminal.module.css';
 import { title } from './commands';
-import React, { useRef } from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 import { setTimeout } from 'timers';
 import { handleCommand } from './command-handler';
 import { CommandHistory, IWindowChildProps, WindowState } from '../../shared/interfaces';
 import GlobalContext from '../../contexts/GlobalContext';
 
 const TerminalModal = (props: IWindowChildProps) => {
-  const [commandInput, setCommandInput] = React.useState('');
-  const [commandHistory, setCommandHistory] = React.useState([] as CommandHistory[]);
+  const [commandInput, setCommandInput] = React.useState<string>('');
+  const [commandHistory, setCommandHistory] = React.useState<CommandHistory[]>([]);
 
   const terminal = useRef<HTMLDivElement>(null);
-  const terminalInput = useRef<HTMLTextAreaElement>(null);
+  const terminalInput = useRef<HTMLInputElement>(null);
 
   const windows = React.useContext(GlobalContext);
 
@@ -69,17 +69,16 @@ const TerminalModal = (props: IWindowChildProps) => {
     });
   }
 
-  async function onInput(e: React.KeyboardEvent<HTMLTextAreaElement>) {
-    if (e.key === 'Enter') {
-      await handleCommand((e.target as HTMLTextAreaElement).value, commandHistory, setCommandHistory, windows);
-      (e.target as HTMLTextAreaElement).value = '';
-      setCommandInput('');
-    }
-  }
+  const onInput = async () => {
+    await handleCommand(commandInput, commandHistory, setCommandHistory, windows);
+    setCommandInput('');
+    terminalInput.current?.blur();
+    terminalInput.current?.focus();
+  };
 
-  function onChangeInput(e: any) {
-    setCommandInput((e.target as HTMLTextAreaElement).value);
-  }
+  const inputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setCommandInput((e.target as HTMLInputElement).value);
+  };
 
   return (
     <div ref={terminal} className={styles.terminal + ' h-full overflow-y-auto'}>
@@ -125,16 +124,18 @@ const TerminalModal = (props: IWindowChildProps) => {
             <span className="text-rose-800">root</span>
             @Yasir_Fayrooz:~$
           </span>
-          {commandInput}
+          <span>{commandInput}</span>
           <span className={`${props.windowState === WindowState.Open && styles.typing}`}></span>
         </p>
       </div>
-      <textarea
+      <input
+        type="text"
         ref={terminalInput}
-        onKeyUp={(e) => onInput(e)}
-        onChange={(e) => onChangeInput(e)}
+        onKeyUp={async (e) => e.key === 'Enter' && (await onInput())}
+        value={commandInput}
+        onChange={(e) => inputChange(e)}
         className="outline-none border-none bg-black caret-transparent w-0 h-0"
-      ></textarea>
+      />
     </div>
   );
 };

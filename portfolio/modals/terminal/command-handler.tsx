@@ -19,7 +19,7 @@ export async function handleCommand(
   setCommandHistory: React.Dispatch<React.SetStateAction<CommandHistory[]>>,
   windows: Windows
 ) {
-  commandInput = commandInput.trim();
+  commandInput = commandInput.trim().toLowerCase();
   switch (commandInput) {
     case 'help':
       const helpCommand: CommandHistory = { command: commandInput, element: HelpCommand() };
