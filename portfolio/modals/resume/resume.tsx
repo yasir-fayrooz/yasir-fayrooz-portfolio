@@ -26,7 +26,11 @@ const ResumeModal = (props: IWindowChildProps) => {
         >
           <p>
             If the resume takes too long to load, click{' '}
-            <a href="https://www.overleaf.com/read/nhbqwrgwctjx" target="_blank" className="text-blue-400 underline">
+            <a
+              href="https://drive.google.com/file/d/1o6YPnILHA6p40K7_DyDjkOWIim6-a91t/view"
+              target="_blank"
+              className="text-blue-400 underline"
+            >
               here
             </a>{' '}
             to view a manual version.
