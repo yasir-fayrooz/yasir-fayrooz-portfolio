@@ -20,7 +20,7 @@ const AboutModal = (props: IWindowChildProps) => {
         <h3>Who is Yasir Fayrooz?</h3>
       </div>
       <div className="grow m-10 mb-1 overflow-auto">
-        <p>Well, I'm glad you have asked..or I have asked..wait what? UGH</p>
+        <p>Well, I'm glad you have asked 🤓</p>
         <p className="mt-4">
           I'm currently <span className="neon-text">{calculateAge()}</span> years old (age updates automatically 😉)!
         </p>

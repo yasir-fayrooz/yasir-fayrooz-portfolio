@@ -131,17 +131,7 @@ const TerminalModal = (props: IWindowChildProps) => {
       <input
         type="text"
         ref={terminalInput}
-        onKeyUp={async (e) => {
-          if (e.key === ' ') {
-            setCommandInput((e.target as HTMLInputElement).value);
-            terminalInput.current?.focus();
-            const val = terminalInput.current!.value; //store the value of the element
-            terminalInput.current!.value = ''; //clear the value of the element
-            terminalInput.current!.value = val; //set that value back.
-          } else if (e.key === 'Enter') {
-            await onInput();
-          }
-        }}
+        onKeyUp={async (e) => e.key === 'Enter' && (await onInput())}
         value={commandInput}
         onChange={(e) => inputChange(e)}
         className="outline-none border-none bg-black caret-transparent w-px h-px"
