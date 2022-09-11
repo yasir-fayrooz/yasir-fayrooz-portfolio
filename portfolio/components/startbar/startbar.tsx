@@ -173,19 +173,19 @@ const StartBar = (props: StartbarProps) => {
   }
 
   return (
-    <div className={'py-1 flex justify-center ' + styles.fadeIn} ref={parentDiv}>
+    <div className={'py-1 flex justify-center'} ref={parentDiv}>
       {anchorPoint && (
         <ul
           ref={rightclickMenu}
           className="absolute bg-zinc-800 border border-black/[0.3] rounded-xl p-2 cursor-pointer"
           style={{
             bottom: 45,
+            position: 'fixed',
             left:
               window.innerWidth < 500
                 ? window.innerWidth / 2 - (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0)
                 : anchorPoint.windowRef.current!.getBoundingClientRect().x -
                   (rightclickMenu.current ? rightclickMenu.current.clientWidth / 2 : 0),
-            zIndex: 9999,
           }}
         >
           <li className="p-2 rounded hover:bg-blue-500/[0.06]" onClick={() => anchorPoint.setState(WindowState.Open)}>

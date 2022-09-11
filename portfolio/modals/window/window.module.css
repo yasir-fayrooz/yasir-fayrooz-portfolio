@@ -5,19 +5,23 @@
 }
 
 .minimised {
-  visibility: hidden;
-  transform: translate(calc(100% / 2), 90vh) scale(0.01, 0.01) !important;
-  transition: transform 0.1s ease-in-out 0s, visibility 600ms;
-
+  visibility: visible;
+  animation: 0.1s ease-in-out minimiseanim forwards;
 }
 
 .maximised {
-  visibility: visible;
-  animation: 0.1s ease-in-out maximiseanim;
+  visibility:hidden;
+  animation: 0.1s ease-in-out maximiseanim forwards;
 }
 
 @keyframes maximiseanim {
-  0% {transform: translate(calc(100% / 2), 90vh) scale(0.1) !important;  }
-  1% {transform: translate(calc(100% / 2), 90vh) scale(0.1)}
-  100% { transform: inherit scale(1);}
+  0% { transform: translate(calc(100% / 2), 90vh) scale(0.1) !important; }
+  1% {visibility: visible; transform: translate(calc(100% / 2), 90vh) scale(0.1)}
+  100% { visibility: visible; transform: inherit scale(1);}
+}
+
+@keyframes minimiseanim {
+  0% { visibility: visible; transform: inherit scale(1);}
+  90% {visibility: hidden; transform: translate(calc(100% / 2), 70vh) scale(0.8)}
+  100% { visibility: hidden; transform: translate(calc(100% / 2), 90vh) scale(0.1) !important; }
 }

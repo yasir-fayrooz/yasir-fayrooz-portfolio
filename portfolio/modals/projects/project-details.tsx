@@ -17,7 +17,7 @@ export const PSM = () => {
         at Motorola.
       </p>
       <p className="mt-2">
-        The publically accessible website was a simple, mobile friendly web application allowing the general public to
+        The publicly accessible website was a simple, mobile friendly web application allowing the general public to
         report crimes anonymously to management. You could also upload media files which I implemented the functionality
         for using Azure Blob Storage and utilisation of various cloud features.
       </p>
