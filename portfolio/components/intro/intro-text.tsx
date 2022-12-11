@@ -1,16 +1,28 @@
 import styles from './intro-text.module.css';
-import React from 'react';
+import React, { Ref, useEffect } from 'react';
 import GlobalContext from '../../contexts/GlobalContext';
 import { WindowState } from '../../shared/interfaces';
 import EnteredContext from '../../contexts/EnteredContext';
 
-const IntroText = () => {
+const IntroText = ({ skipIntroRef }: any) => {
   const windows = React.useContext(GlobalContext);
   const { entered } = React.useContext(EnteredContext);
 
+  const typingDivRef = React.useRef<HTMLDivElement>(null);
+  const introButtonsRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    skipIntroRef.current = skipIntro;
+  });
+
+  function skipIntro() {
+    typingDivRef.current!.classList.remove(styles.typing);
+    introButtonsRef.current!.classList.remove(styles.fadeIn);
+  }
+
   return (
     <>
-      <div className={styles.text + ' ' + styles.typing}>
+      <div className={styles.text + ' ' + styles.typing} ref={typingDivRef}>
         <p>
           \[._.]/ Hey there <span className={styles.wave}>👋</span> I&apos;m Yasir Fayrooz
         </p>
@@ -34,7 +46,7 @@ const IntroText = () => {
       </div>
 
       {entered && (
-        <div className={'text-sky-300 underline ' + styles.fadeIn}>
+        <div className={'text-sky-300 underline ' + styles.fadeIn} ref={introButtonsRef}>
           <div className="grid grid-cols-12 mt-5">
             <div className="col-span-6">
               <button

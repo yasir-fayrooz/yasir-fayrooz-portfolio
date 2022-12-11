@@ -1,19 +1,38 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import EnteredContext from '../../contexts/EnteredContext';
 import Blinker from '../blinker/blinker';
 import IntroText from './intro-text';
 
 const Intro = () => {
   const hasEntered = React.useContext(EnteredContext);
+  let [audio, setAudio] = useState<HTMLAudioElement | null>(null);
+
+  const skipDiv = useRef<HTMLDivElement>(null);
+  const skipIntro = React.useRef<() => void>(() => {});
+
+  useEffect(() => {
+    setAudio(new Audio('./audio/typing.m4a'));
+  }, []);
 
   function openWebsite() {
-    const audio = new Audio('./audio/typing.m4a');
+    audio!.play();
 
-    audio.play();
-
-    audio.onplaying = (e) => {
+    audio!.onplaying = (e) => {
       hasEntered.setEntered(true);
     };
+
+    setTimeout(() => {
+      skipDiv.current!.style.display = 'none';
+    }, 11500);
+  }
+
+  function skipIntroFunc() {
+    audio!.pause();
+    skipDiv.current!.style.display = 'none';
+    const startbar = document.getElementsByClassName('fadeInStartbar');
+    if (startbar.item(0)) {
+      startbar.item(0)?.classList.remove('fadeInStartbar');
+    }
   }
 
   return (
@@ -41,7 +60,19 @@ const Intro = () => {
               Click me!
             </button>
           ) : (
-            <IntroText />
+            <>
+              <IntroText skipIntroRef={skipIntro} />
+              <div
+                className="flex justify-center mt-3"
+                ref={skipDiv}
+                onClick={() => {
+                  skipIntro.current();
+                  skipIntroFunc();
+                }}
+              >
+                <button>Skip intro</button>
+              </div>
+            </>
           )}
         </div>
       </div>
