@@ -130,7 +130,7 @@ async function MemeCommand() {
     <p>Oh no, an error has occurred fetching your meme. Please contact me and I will resolve this asap :(</p>
   );
 
-  const resp = await fetch('https://meme-api.herokuapp.com/gimme');
+  const resp = await fetch('https://meme-api.com/gimme');
 
   if (resp.ok) {
     const data: any = await resp.json();
