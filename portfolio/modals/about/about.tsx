@@ -25,10 +25,10 @@ const AboutModal = (props: IWindowChildProps) => {
           I'm currently <span className="neon-text">{calculateAge()}</span> years old (age updates automatically 😉)!
         </p>
         <p className="mt-4">
-          I was born and raised in <span className="neon-text">Melbourne, Australia</span> to an Iraqi family. I lived
-          the majority of my childhood in a country Victorian town named Shepparton. I’ve always been a great problem
-          solver, an independent learner and a technophile obsessed with the latest devices and tech. Today, I’m working
-          as a software engineer and I get to show off all the elements of who I am.
+          I was born in <span className="neon-text">Melbourne, Australia</span> to an Iraqi family. I lived the majority
+          of my childhood in a country Victorian town named Shepparton before moving back to Melbourne. I’ve always been
+          a great problem solver, an independent learner and a technophile obsessed with the latest devices and tech.
+          Today, I’m working as a software engineer and I get to show off all the elements of who I am.
         </p>
         <p className="mt-4">
           I started learning to code when I was a teenager, though it was always more of a hobby than a career focus.
