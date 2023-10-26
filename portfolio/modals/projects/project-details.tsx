@@ -1,5 +1,32 @@
 import Image from 'next/image';
 
+export const AIJourney = () => {
+  return (
+    <div className="flex flex-col">
+      <h3>Role:</h3>
+      <p>Main developer - Backend</p>
+      <h3 className="mt-2">Achievements:</h3>
+      <p>- Implemented newly researched industry standard Generative AI techniques.</p>
+      <p>- Working closely with our Microsoft partnership to gain insight on AI development.</p>
+      <p>- Learned from scratch prompt engineering techniques using <a href='https://learnprompting.org/docs/intro'>tutorials</a></p>
+      <p>- Successfully refined my work & delivering in a timely scoped manner.</p>
+      <h3 className="mt-2">Description:</h3>
+      <p>
+        CEO of preezie wanted an AI POC of our product to demonstrate to investors for a potential series B raise and investment in the future of AI in Australian businesses.
+      </p>
+      <p className="mt-2">
+        A small team of developers worked closely with the head of technology to scope out requirements and develop a MVP within a couple months.
+      </p>
+      <p className="mt-2">
+        I implemented vector search using Open AI embeddings and Pinecone DB to store our data for the POC. We built a self-serve Journey quiz builder which eliminates the need for manual customer success related work.
+      </p>
+      <p className="mt-2">
+        Used Open AI GPT-3.5-turbo-16k and GPT-4 APIs to demonstrate the capability of generative AI for our solution. A Node.Js solution was developed with a ts.ED web api backend, react frontend, PostgreSQL database, Pinecone DB, Open AI APIs & Langchain.
+      </p>
+    </div>
+  );
+};
+
 export const PSM = () => {
   return (
     <div className="flex flex-col">

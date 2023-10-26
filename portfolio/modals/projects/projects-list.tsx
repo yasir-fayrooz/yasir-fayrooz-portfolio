@@ -1,7 +1,16 @@
 import { ProjectDesc } from '../../shared/interfaces';
-import { AIPacman, autoPTT, motorolaSWAM, noccApp, PSM, swordLife } from './project-details';
+import { AIJourney, AIPacman, autoPTT, motorolaSWAM, noccApp, PSM, swordLife } from './project-details';
 
 export const projectsList: ProjectDesc[] = [
+  {
+    key: 'project-6',
+    name: 'Open AI/Langchain/Pinecone Journey builder',
+    description:
+      'A POC developed at preezie to implement Generative AI in our solution',
+    fromDate: 'Sep 2023',
+    toDate: 'Nov 2023',
+    elementRef: AIJourney,
+  },
   {
     key: 'project-5',
     name: 'Public Safety Management (PSM)',
