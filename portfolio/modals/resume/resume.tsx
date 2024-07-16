@@ -1,9 +1,26 @@
 import styles from './resume.module.css';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { IWindowChildProps } from '../../shared/interfaces';
 
 const ResumeModal = (props: IWindowChildProps) => {
   const [loaded, setLoaded] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+
+  useEffect(() => {
+    console.log(iframeRef.current?.src);
+    if (!iframeRef.current!.src || iframeRef.current!.src === '') {
+      fetch('https://api.github.com/repositories/528450278/contents/cv.pdf')
+        .then(function (response) {
+          return response.json();
+        })
+        .then(function (data) {
+          iframeRef.current!.src = 'data:application/pdf;base64,' + encodeURIComponent(data['content']);
+          setLoaded(true);
+        });
+    } else {
+      setLoaded(true);
+    }
+  }, []);
 
   return (
     <div className={`flex flex-col w-full h-full overflow-y-auto ${styles.iframeLoader}`}>
@@ -13,12 +30,7 @@ const ResumeModal = (props: IWindowChildProps) => {
         </div>
       )}
 
-      <iframe
-        className="grow"
-        onLoad={() => setLoaded(true)}
-        title="Resume"
-        src="https://texlive2020.latexonline.cc/compile?git=https://github.com/yasir-fayrooz/yasir-fayrooz-resume&target=cv.tex&command=lualatex" //&force=true to force re-compile
-      ></iframe>
+      <iframe className="grow" title="Resume" ref={iframeRef}></iframe>
 
       {!loaded && (
         <div
@@ -30,6 +42,7 @@ const ResumeModal = (props: IWindowChildProps) => {
               href="https://drive.google.com/file/d/1o6YPnILHA6p40K7_DyDjkOWIim6-a91t/view"
               target="_blank"
               className="text-blue-400 underline"
+              rel="noreferrer"
             >
               here
             </a>{' '}
